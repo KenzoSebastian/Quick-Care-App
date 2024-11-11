@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:quickcare_app/widgets/animate_fade.dart';
 import './register_page.dart';
 import '../widgets/build_text_field.dart';
 import '../providers/login_provider.dart';
@@ -25,82 +26,98 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const AnimatedFade(delay: 200, child: Text('Login')),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset('assets/images/login.jpg',
-                height: availableHeight * 0.3),
+            AnimatedFade(
+              delay: 400,
+              child: Image.asset('assets/images/login.jpg',
+                  height: availableHeight * 0.3),
+            ),
             const SizedBox(height: 10),
-            Text(
-              "Silakan masukkan email dan kata sandi Anda untuk melanjutkan.",
-              style: GoogleFonts.poppins(fontSize: screenSize.width * 0.04),
-              textAlign: TextAlign.center,
+            AnimatedFade(
+              delay: 600,
+              child: Text(
+                "Silakan masukkan email dan kata sandi Anda untuk melanjutkan.",
+                style: GoogleFonts.poppins(fontSize: screenSize.width * 0.04),
+                textAlign: TextAlign.center,
+              ),
             ),
             const SizedBox(height: 20),
-            BuildTextField(
-              controller: emailController,
-              label: 'Email',
-              icon: Icons.email,
-              keyboardType: TextInputType.emailAddress,
+            AnimatedFade(
+              delay: 800,
+              child: BuildTextField(
+                controller: emailController,
+                label: 'Email',
+                icon: Icons.email,
+                keyboardType: TextInputType.emailAddress,
+              ),
             ),
             const SizedBox(height: 20),
-            Consumer<LoginProvider>(
-              builder: (context, loginProvider, child) => BuildTextField(
-                controller: passwordController,
-                label: 'Password',
-                icon: Icons.lock,
-                obscureText: loginProvider.hidePass,
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    loginProvider.setHidePass();
-                  },
-                  icon: loginProvider.hidePass
-                      ? const Icon(Icons.visibility)
-                      : const Icon(Icons.visibility_off),
+            AnimatedFade(
+              delay: 1000,
+              child: Consumer<LoginProvider>(
+                builder: (context, loginProvider, child) => BuildTextField(
+                  controller: passwordController,
+                  label: 'Password',
+                  icon: Icons.lock,
+                  obscureText: loginProvider.hidePass,
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      loginProvider.setHidePass();
+                    },
+                    icon: loginProvider.hidePass
+                        ? const Icon(Icons.visibility)
+                        : const Icon(Icons.visibility_off),
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Tidak punya akun?",
-                    style: GoogleFonts.poppins(
-                        fontSize: screenSize.width * 0.035)),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, RegisterPage.routeName);
-                  },
-                  child: Text("Daftar",
+            AnimatedFade(
+              delay: 1200,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Tidak punya akun?",
                       style: GoogleFonts.poppins(
-                        fontSize: screenSize.width * 0.035,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).secondaryHeaderColor,
-                      )),
-                ),
-              ],
+                          fontSize: screenSize.width * 0.035)),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                          context, RegisterPage.routeName);
+                    },
+                    child: Text("Daftar",
+                        style: GoogleFonts.poppins(
+                          fontSize: screenSize.width * 0.035,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).secondaryHeaderColor,
+                        )),
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: availableHeight * 0.15),
-            SizedBox(
-              width: screenSize.width * 0.9,
-              child: ElevatedButton(
-                onPressed: () {
-                  
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).secondaryHeaderColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+            AnimatedFade(
+              delay: 1400,
+              child: SizedBox(
+                width: screenSize.width * 0.9,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).secondaryHeaderColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    minimumSize: const Size(double.infinity, 50),
                   ),
-                  minimumSize: const Size(double.infinity, 50),
+                  child:
+                      const Text('Login', style: TextStyle(color: Colors.white)),
                 ),
-                child:
-                    const Text('Login', style: TextStyle(color: Colors.white)),
               ),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:quickcare_app/widgets/animate_scale.dart';
 import './login_page.dart';
 
 class IntroPage extends StatelessWidget {
@@ -31,16 +32,25 @@ class IntroPage extends StatelessWidget {
   static PageViewModel _pageSlide(
       {required String title, required String body, required String image}) {
     return PageViewModel(
-      title: title,
-      body: body,
-      image: Image.asset(image),
-      decoration: PageDecoration(
-          titleTextStyle: GoogleFonts.poppins(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-          bodyTextStyle: GoogleFonts.poppins(
-            fontSize: 16,
+      image: AnimatedScaleCustom(delay: 300, child: Image.asset(image)),
+      titleWidget: AnimatedScaleCustom(
+          delay: 500,
+          child: Text(
+            title,
+            style: GoogleFonts.poppins(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          )),
+      bodyWidget: AnimatedScaleCustom(
+          delay: 700,
+          child: Text(
+            body,
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
           )),
     );
   }

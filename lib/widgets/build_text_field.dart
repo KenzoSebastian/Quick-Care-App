@@ -6,6 +6,7 @@ class BuildTextField extends StatelessWidget {
     required this.controller,
     required this.label,
     required this.icon,
+    this.readOnly = false,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.suffixIcon,
@@ -14,6 +15,7 @@ class BuildTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final IconData icon;
+  final bool readOnly;
   final bool obscureText;
   final TextInputType keyboardType;
   final Widget? suffixIcon;
@@ -38,6 +40,7 @@ class BuildTextField extends StatelessWidget {
           prefixIcon: Icon(icon),
           suffixIcon: suffixIcon,
         ),
+        readOnly: readOnly,
         obscureText: obscureText,
         keyboardType: keyboardType,
       ),

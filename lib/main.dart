@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-// import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import './pages/register_page.dart';
 import './providers/login_provider.dart';
 import './providers/register_provider.dart';
@@ -11,18 +11,11 @@ import './pages/intro_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await dotenv.load(fileName: ".env");
-
-  try {
-    await dotenv.load(fileName: ".env");
-    print("File .env loaded successfully");
-  } catch (e) {
-    print("Error loading .env file: $e");
-  }
-  // await Supabase.initialize(
-  //   url: "${dotenv.env['SUPABASE_URL']}",
-  //   anonKey: "${dotenv.env['SUPABASE_ANON_KEY']}",
-  // );
+  await dotenv.load(fileName: ".env");
+  await Supabase.initialize(
+    url: "${dotenv.env['SUPABASE_URL']}",
+    anonKey: "${dotenv.env['SUPABASE_ANON_KEY']}",
+  );
   runApp(const MyApp());
 }
 
@@ -42,7 +35,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
           secondaryHeaderColor: const Color(0xFF2196F3),
-          // scaffoldBackgroundColor: Colors.white,
           textTheme: const TextTheme(
             displayLarge: TextStyle(
               fontSize: 24,
