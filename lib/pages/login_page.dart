@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:quickcare_app/widgets/animate_fade.dart';
+import 'package:quickcare_app/pages/home_page.dart';
+import '../widgets/animate_fade.dart';
 import './register_page.dart';
 import '../widgets/build_text_field.dart';
 import '../providers/login_provider.dart';
@@ -106,17 +107,34 @@ class _LoginPageState extends State<LoginPage> {
               delay: 1400,
               child: SizedBox(
                 width: screenSize.width * 0.9,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).secondaryHeaderColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                child: Consumer<LoginProvider>(
+                  builder: (context, loginProvider, child) => ElevatedButton(
+                    onPressed: () async {
+                      await loginProvider.loginUser(
+                          email: emailController.text,
+                          password: passwordController.text);
+                      if (loginProvider.user['error'] == null) {
+                        Navigator.pushReplacementNamed(
+                            context, HomePage.routeName,
+                            arguments: loginProvider.user);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(loginProvider.user['error']),
+                          backgroundColor: Colors.red,
+                          duration: const Duration(seconds: 1),
+                        ));
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).secondaryHeaderColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      minimumSize: const Size(double.infinity, 50),
                     ),
-                    minimumSize: const Size(double.infinity, 50),
+                    child: const Text('Login',
+                        style: TextStyle(color: Colors.white)),
                   ),
-                  child:
-                      const Text('Login', style: TextStyle(color: Colors.white)),
                 ),
               ),
             ),

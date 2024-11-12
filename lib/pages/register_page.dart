@@ -172,19 +172,56 @@ class _RegisterPageState extends State<RegisterPage> {
               delay: 2000,
               child: SizedBox(
                 width: screenSize.width * 0.9,
-                child: ElevatedButton(
-                  onPressed: () {
-                    print(birthDateController.text);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).secondaryHeaderColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                child: Consumer<RegisterProvider>(
+                  builder: (context, registerProvider, child) => ElevatedButton(
+                    onPressed: () async {
+                      await registerProvider.createUser(
+                        nama: fullNameController.text,
+                        nik: nikController.text,
+                        noHandphone: phoneController.text,
+                        tglLahir: birthDateController.text,
+                        email: emailController.text,
+                        password: passwordController.text,
+                      );
+                      if (registerProvider.user['error'] == null) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Registrasi Berhasil'),
+                              content:
+                                  const Text('Anda telah berhasil mendaftar.'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.pushReplacementNamed(
+                                        context, LoginPage.routeName);
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(registerProvider.user['error']),
+                          backgroundColor: Colors.red,
+                          duration: const Duration(seconds: 1),
+                        ));
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).secondaryHeaderColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      minimumSize: const Size(double.infinity, 50),
                     ),
-                    minimumSize: const Size(double.infinity, 50),
+                    child: const Text('Daftar',
+                        style: TextStyle(color: Colors.white)),
                   ),
-                  child: const Text('Daftar',
-                      style: TextStyle(color: Colors.white)),
                 ),
               ),
             ),

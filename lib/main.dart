@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import './pages/home_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import './pages/register_page.dart';
 import './providers/login_provider.dart';
@@ -74,6 +75,7 @@ class MyApp extends StatelessWidget {
           IntroPage.routeName: (context) => const IntroPage(),
           LoginPage.routeName: (context) => const LoginPage(),
           RegisterPage.routeName: (context) => const RegisterPage(),
+          HomePage.routeName: (context) => const HomePage(),
         },
       ),
     );
