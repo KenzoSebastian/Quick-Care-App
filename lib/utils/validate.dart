@@ -9,7 +9,7 @@ class Validate {
       required String noHandphone,
       required String tglLahir,
       required String email,
-      required String password}) {
+      required String password}) async {
     // validation empty field
     if (nama.isEmpty ||
         nik.isEmpty ||
@@ -17,8 +17,15 @@ class Validate {
         tglLahir.isEmpty ||
         email.isEmpty ||
         password.isEmpty) return Future.error('Semua field harus diisi');
+    await namaValidation(nama: nama);
+    await nikValidation(nik: nik);
+    await noHandphoneValidation(noHandphone: noHandphone);
+    await emailValidation(email: email);
+    await passwordValidation(password: password);
+    return null;
+  }
 
-    // validation nama
+  static Future? namaValidation({required String nama}) {
     try {
       final namaSplit = nama.split(' ');
       final namaJoin = namaSplit.join();
@@ -39,7 +46,10 @@ class Validate {
       print(e);
       return Future.error('Nama tidak boleh berakhir dengan spasi');
     }
+    return null;
+  }
 
+  static Future? nikValidation({required String nik}) {
     // validation nik
     final nikSplit = nik.split('');
     if (!isNumeric(nik)) {
@@ -48,7 +58,10 @@ class Validate {
     if (nikSplit.length != 16) {
       return Future.error('NIK harus terdiri dari 16 angka');
     }
+    return null;
+  }
 
+  static Future? noHandphoneValidation({required String noHandphone}) {
     // validation no handphone
     final noHandphoneSplit = noHandphone.split('');
     final validPrefixes = ['081', '082', '083', '085', '087'];
@@ -61,12 +74,18 @@ class Validate {
     if (!validPrefixes.any((prefix) => noHandphone.startsWith(prefix))) {
       return Future.error('No. Handphone tidak valid');
     }
+    return null;
+  }
 
+  static Future? emailValidation({required String email}) {
     // validation email
     if (!isEmail(email)) {
       return Future.error('Email tidak valid');
     }
+    return null;
+  }
 
+  static Future? passwordValidation({required String password}) {
     // validation password
     final passwordSplit = password.split('');
     if (passwordSplit.length < 5) {
@@ -79,21 +98,14 @@ class Validate {
   }
 
   static Future? validationLogin(
-      {required String email, required String password}) {
+      {required String email, required String password}) async {
     // validation empty field
     if (email.isEmpty || password.isEmpty) {
       return Future.error('Semua field harus diisi');
     }
 
-    // validation email
-    if (!isEmail(email)) {
-      return Future.error('Email tidak valid');
-    }
-
-    // validation password
-    if (password.length < 5) {
-      return Future.error('Password minimal 5 karakter');
-    }
+    await emailValidation(email: email);
+    await passwordValidation(password: password);
     return null;
   }
 
@@ -112,4 +124,6 @@ class Validate {
     }
     return null;
   }
+
+  static validateName({required nama}) {}
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import './providers/input_provider.dart';
+import './providers/dashboard_provider.dart';
 import './pages/home_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import './pages/register_page.dart';
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: LoginProvider()),
         ChangeNotifierProvider.value(value: RegisterProvider()),
+        ChangeNotifierProvider.value(value: InputProvider()),
+        ChangeNotifierProvider.value(value: LoadDataUser()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

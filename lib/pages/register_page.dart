@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../providers/input_provider.dart';
 import '../widgets/animate_fade.dart';
 import './login_page.dart';
 import '../widgets/build_text_field.dart';
@@ -22,6 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController birthDateController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _errorInitialNull = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -34,6 +36,26 @@ class _RegisterPageState extends State<RegisterPage> {
       String formattedDate = DateFormat('dd-MMM-yyyy').format(pickedDate);
       setState(() => birthDateController.text = formattedDate);
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final InputProvider inputProvider =
+          Provider.of<InputProvider>(context, listen: false);
+      if (!inputProvider.hidePass) {
+        inputProvider.setHidePass();
+      }
+      if (!_errorInitialNull) {
+        inputProvider.setErrorMassageNama(null);
+        inputProvider.setErrorMassageNik(null);
+        inputProvider.setErrorMassageNoHandphone(null);
+        inputProvider.setErrorMassageEmail(null);
+        inputProvider.setErrorMassagePassword(null);
+        _errorInitialNull = true;
+      }
+    });
+    super.didChangeDependencies();
   }
 
   @override
@@ -64,32 +86,107 @@ class _RegisterPageState extends State<RegisterPage> {
             // Full Name Field
             AnimatedFade(
               delay: 600,
-              child: BuildTextField(
-                controller: fullNameController,
-                label: 'Nama Lengkap',
-                icon: Icons.person,
+              child: Column(
+                children: [
+                  BuildTextField(
+                    controller: fullNameController,
+                    label: 'Nama Lengkap',
+                    icon: Icons.person,
+                  ),
+                  Consumer<InputProvider>(
+                    builder: (context, value, child) {
+                      if (value.errorMassageNama == null || fullNameController.text.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+                      return Row(
+                        children: [
+                          const Icon(
+                            Icons.error,
+                            color: Colors.red,
+                            size: 16,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(value.errorMassageNama ?? '',
+                              style: const TextStyle(color: Colors.red)),
+                        ],
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
             // NIK Field
             AnimatedFade(
               delay: 800,
-              child: BuildTextField(
-                controller: nikController,
-                label: 'NIK',
-                icon: Icons.credit_card,
-                keyboardType: TextInputType.number,
+              child: Column(
+                children: [
+                  BuildTextField(
+                    controller: nikController,
+                    label: 'NIK',
+                    icon: Icons.credit_card,
+                    keyboardType: TextInputType.number,
+                  ),
+                  Consumer<InputProvider>(
+                    builder: (context, value, child) {
+                      if (value.errorMassageNik == null || nikController.text.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+                      return Row(
+                        children: [
+                          const Icon(
+                            Icons.error,
+                            color: Colors.red,
+                            size: 16,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(value.errorMassageNik ?? '',
+                              style: const TextStyle(color: Colors.red)),
+                        ],
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
             // Phone Number Field
             AnimatedFade(
               delay: 1000,
-              child: BuildTextField(
-                controller: phoneController,
-                label: 'No Handphone',
-                icon: Icons.phone,
-                keyboardType: TextInputType.phone,
+              child: Column(
+                children: [
+                  BuildTextField(
+                    controller: phoneController,
+                    label: 'No Handphone',
+                    icon: Icons.phone,
+                    keyboardType: TextInputType.phone,
+                  ),
+                  Consumer<InputProvider>(
+                    builder: (context, value, child) {
+                      if (value.errorMassageNoHandphone == null || phoneController.text.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+                      return Row(
+                        children: [
+                          const Icon(
+                            Icons.error,
+                            color: Colors.red,
+                            size: 16,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(value.errorMassageNoHandphone ?? '',
+                              style: const TextStyle(color: Colors.red)),
+                        ],
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
@@ -99,7 +196,6 @@ class _RegisterPageState extends State<RegisterPage> {
               child: GestureDetector(
                 onTap: () {
                   _selectDate(context);
-                  print('Birth Date Field Tapped'); // Debugging
                 },
                 child: AbsorbPointer(
                   child: BuildTextField(
@@ -115,31 +211,81 @@ class _RegisterPageState extends State<RegisterPage> {
             // Email Field
             AnimatedFade(
               delay: 1400,
-              child: BuildTextField(
-                controller: emailController,
-                label: 'Email',
-                icon: Icons.email,
-                keyboardType: TextInputType.emailAddress,
+              child: Column(
+                children: [
+                  BuildTextField(
+                    controller: emailController,
+                    label: 'Email',
+                    icon: Icons.email,
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  Consumer<InputProvider>(
+                    builder: (context, value, child) {
+                      if (value.errorMassageEmail == null) {
+                        return const SizedBox.shrink();
+                      }
+                      return Row(
+                        children: [
+                          const Icon(
+                            Icons.error,
+                            color: Colors.red,
+                            size: 16,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(value.errorMassageEmail ?? '',
+                              style: const TextStyle(color: Colors.red)),
+                        ],
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
             // Password Field
             AnimatedFade(
               delay: 1600,
-              child: Consumer<RegisterProvider>(
-                builder: (context, registerProvider, child) => BuildTextField(
-                  controller: passwordController,
-                  label: 'Password',
-                  icon: Icons.lock,
-                  obscureText: registerProvider.hidePass,
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      registerProvider.setHidePass();
-                    },
-                    icon: registerProvider.hidePass
-                        ? const Icon(Icons.visibility)
-                        : const Icon(Icons.visibility_off),
-                  ),
+              child: Consumer<InputProvider>(
+                builder: (context, provider, child) => Column(
+                  children: [
+                    BuildTextField(
+                      controller: passwordController,
+                      label: 'Password',
+                      icon: Icons.lock,
+                      obscureText: provider.hidePass,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          provider.setHidePass();
+                        },
+                        icon: provider.hidePass
+                            ? const Icon(Icons.visibility)
+                            : const Icon(Icons.visibility_off),
+                      ),
+                    ),
+                    Consumer<InputProvider>(
+                      builder: (context, value, child) {
+                        if (value.errorMassagePassword == null) {
+                          return const SizedBox.shrink();
+                        }
+                        return Row(
+                          children: [
+                            const Icon(
+                              Icons.error,
+                              color: Colors.red,
+                              size: 16,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(value.errorMassagePassword ?? '',
+                                style: const TextStyle(color: Colors.red)),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),

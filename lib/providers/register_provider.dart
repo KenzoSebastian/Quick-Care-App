@@ -6,13 +6,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class RegisterProvider with ChangeNotifier {
   final supabase = Supabase.instance.client;
   final Map<String, dynamic> _user = {};
-  bool _hidePass = true;
-
-  bool get hidePass => _hidePass;
-  void setHidePass() {
-    _hidePass = !_hidePass;
-    notifyListeners();
-  }
 
   Map<String, dynamic> get user => _user;
 

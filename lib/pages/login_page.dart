@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:quickcare_app/pages/home_page.dart';
+import 'package:quickcare_app/providers/input_provider.dart';
 import '../widgets/animate_fade.dart';
 import './register_page.dart';
 import '../widgets/build_text_field.dart';
@@ -18,6 +19,25 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _errorInitialNull = false;
+
+
+  @override
+  void didChangeDependencies() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final InputProvider inputProvider =
+          Provider.of<InputProvider>(context, listen: false);
+      if (!inputProvider.hidePass) {
+        inputProvider.setHidePass();
+      }
+      if (!_errorInitialNull) {
+        inputProvider.setErrorMassageEmail(null);
+        inputProvider.setErrorMassagePassword(null);
+        _errorInitialNull = true;
+      }
+    });
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,30 +71,80 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 20),
             AnimatedFade(
               delay: 800,
-              child: BuildTextField(
-                controller: emailController,
-                label: 'Email',
-                icon: Icons.email,
-                keyboardType: TextInputType.emailAddress,
+              child: Column(
+                children: [
+                  BuildTextField(
+                    controller: emailController,
+                    label: 'Email',
+                    icon: Icons.email,
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  Consumer<InputProvider>(
+                    builder: (context, value, child) {
+                      if (value.errorMassageEmail == null || emailController.text.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+                      return Row(
+                        children: [
+                          const Icon(
+                            Icons.error,
+                            color: Colors.red,
+                            size: 16,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(value.errorMassageEmail ?? '',
+                              style: const TextStyle(color: Colors.red)),
+                        ],
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
             AnimatedFade(
               delay: 1000,
-              child: Consumer<LoginProvider>(
-                builder: (context, loginProvider, child) => BuildTextField(
-                  controller: passwordController,
-                  label: 'Password',
-                  icon: Icons.lock,
-                  obscureText: loginProvider.hidePass,
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      loginProvider.setHidePass();
-                    },
-                    icon: loginProvider.hidePass
-                        ? const Icon(Icons.visibility)
-                        : const Icon(Icons.visibility_off),
-                  ),
+              child: Consumer<InputProvider>(
+                builder: (context, provider, child) => Column(
+                  children: [
+                    BuildTextField(
+                      controller: passwordController,
+                      label: 'Password',
+                      icon: Icons.lock,
+                      obscureText: provider.hidePass,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          provider.setHidePass();
+                        },
+                        icon: provider.hidePass
+                            ? const Icon(Icons.visibility)
+                            : const Icon(Icons.visibility_off),
+                      ),
+                    ),
+                    Consumer<InputProvider>(
+                      builder: (context, value, child) {
+                        if (value.errorMassagePassword == null || passwordController.text.isEmpty) {
+                          return const SizedBox.shrink();
+                        }
+                        return Row(
+                          children: [
+                            const Icon(
+                              Icons.error,
+                              color: Colors.red,
+                              size: 16,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(value.errorMassagePassword ?? '',
+                                style: const TextStyle(color: Colors.red)),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
