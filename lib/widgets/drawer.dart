@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:quickcare_app/providers/tab_bar_provider.dart';
 import '../providers/dashboard_provider.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -10,46 +11,54 @@ class MyDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final heightFull = screenSize.height;
+    final TabBarProvider tabBarProvider =
+        Provider.of<TabBarProvider>(context, listen: false);
     return Drawer(
       child: Column(
         children: <Widget>[
           Consumer<LoadDataUser>(
-            builder: (context, provider, child) {
-              final data = provider.data;
-              return Container(
-                  padding: const EdgeInsets.all(16.0),
-                  color: const Color.fromARGB(255, 1, 163, 199),
-                  width: double.infinity,
-                  height: heightFull * .25,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const CircleAvatar(
-                          radius: 45,
-                          backgroundImage:
-                              NetworkImage('https://i.pravatar.cc/300'),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(data['nama'] ?? 'erorr',
-                                  style: GoogleFonts.lato(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  )),
-                              Text(data['email'] ?? 'erorr',
-                                  style: GoogleFonts.lato(
-                                    fontSize: 16.0,
-                                    color: Colors.white,
-                                  ))
-                            ],
+            builder: (context, loadData, child) {
+              final data = loadData.data;
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                  tabBarProvider.setTabIndex(3);
+                },
+                child: Container(
+                    padding: const EdgeInsets.all(16.0),
+                    color: const Color.fromRGBO(1, 163, 199, 1),
+                    width: double.infinity,
+                    height: heightFull * .25,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const CircleAvatar(
+                            radius: 45,
+                            backgroundImage:
+                                NetworkImage('https://i.pravatar.cc/300'),
                           ),
-                        ),
-                      ]));
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(data['nama'] ?? 'erorr',
+                                    style: GoogleFonts.lato(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    )),
+                                Text(data['email'] ?? 'erorr',
+                                    style: GoogleFonts.lato(
+                                      fontSize: 16.0,
+                                      color: Colors.white,
+                                    ))
+                              ],
+                            ),
+                          ),
+                        ])),
+              );
             },
           ),
           Expanded(
@@ -59,7 +68,9 @@ class MyDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.home),
                   title: const Text('Home'),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
                 ListTile(
                   leading: const Icon(Icons.calendar_today),
@@ -72,6 +83,7 @@ class MyDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(context);
                     _aboutDialog(context);
+                    tabBarProvider.setTabIndex(0);
                   },
                 ),
                 ListTile(

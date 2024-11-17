@@ -13,6 +13,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.orange,
         title: const Text('history page'),
       ),
       // drawer: const MyDrawer(),
