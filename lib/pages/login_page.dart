@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:quickcare_app/pages/home_page.dart';
-import 'package:quickcare_app/providers/input_provider.dart';
+import 'package:quickcare_app/widgets/bottom_navbar.dart';
+import '../providers/input_provider.dart';
 import '../widgets/animate_fade.dart';
 import './register_page.dart';
 import '../widgets/build_text_field.dart';
@@ -20,7 +20,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool _errorInitialNull = false;
-
 
   @override
   void didChangeDependencies() {
@@ -81,7 +80,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Consumer<InputProvider>(
                     builder: (context, value, child) {
-                      if (value.errorMassageEmail == null || emailController.text.isEmpty) {
+                      if (value.errorMassageEmail == null ||
+                          emailController.text.isEmpty) {
                         return const SizedBox.shrink();
                       }
                       return Row(
@@ -125,7 +125,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Consumer<InputProvider>(
                       builder: (context, value, child) {
-                        if (value.errorMassagePassword == null || passwordController.text.isEmpty) {
+                        if (value.errorMassagePassword == null ||
+                            passwordController.text.isEmpty) {
                           return const SizedBox.shrink();
                         }
                         return Row(
@@ -184,9 +185,10 @@ class _LoginPageState extends State<LoginPage> {
                           email: emailController.text,
                           password: passwordController.text);
                       if (loginProvider.user['error'] == null) {
-                        Navigator.pushReplacementNamed(
-                            context, HomePage.routeName,
-                            arguments: loginProvider.user);
+                        Navigator.pushNamed(context, BottomNavbar.routeName, arguments: loginProvider.user);
+                        // Navigator.pushReplacementNamed(
+                        //     context, HomePage.routeName,
+                        //     arguments: loginProvider.user);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(loginProvider.user['error']),

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import './providers/tab_bar_provider.dart';
+import './widgets/bottom_navbar.dart';
+import './pages/splash_screen_page.dart';
 import './providers/input_provider.dart';
 import './providers/dashboard_provider.dart';
-import './pages/home_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import './pages/register_page.dart';
 import './providers/login_provider.dart';
@@ -33,6 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: RegisterProvider()),
         ChangeNotifierProvider.value(value: InputProvider()),
         ChangeNotifierProvider.value(value: LoadDataUser()),
+        ChangeNotifierProvider.value(value: TabBarProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -74,12 +77,13 @@ class MyApp extends StatelessWidget {
             centerTitle: true,
           ),
         ),
-        initialRoute: IntroPage.routeName,
+        initialRoute: BottomNavbar.routeName,
         routes: {
-          IntroPage.routeName: (context) => const IntroPage(),
-          LoginPage.routeName: (context) => const LoginPage(),
-          RegisterPage.routeName: (context) => const RegisterPage(),
-          HomePage.routeName: (context) => const HomePage(),
+          SplashPage.routeName: (_) => const SplashPage(),
+          IntroPage.routeName: (_) => const IntroPage(),
+          LoginPage.routeName: (_) => const LoginPage(),
+          RegisterPage.routeName: (_) => const RegisterPage(),
+          BottomNavbar.routeName: (_) => const BottomNavbar(),
         },
       ),
     );
