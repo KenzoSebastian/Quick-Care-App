@@ -5,7 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:provider/provider.dart';
 import 'package:quickcare_app/providers/dashboard_provider.dart';
-// import '../providers/tab_bar_provider.dart';
+import 'package:quickcare_app/providers/dokter_provider.dart';
+import 'package:quickcare_app/providers/tab_bar_provider.dart';
+import 'package:quickcare_app/widgets/card_dokter.dart';
 import '../widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -146,6 +148,8 @@ class _HomePageState extends State<HomePage> {
     final screenSize = MediaQuery.of(context).size;
     final appBarHeight = AppBar().preferredSize.height;
     final availableHeight = screenSize.height - appBarHeight;
+    final TabBarProvider tabBarProvider =
+        Provider.of<TabBarProvider>(context, listen: false);
 
     final hour = DateTime.now().hour;
     String greeting;
@@ -161,20 +165,25 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text('Beranda'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              Provider.of<DokterProvider>(context, listen: false).setDokter();
+            },
+          )
+        ],
       ),
       drawer: const MyDrawer(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(
-              top: availableHeight * .05,
-              left: screenSize.width * .05,
-              right: screenSize.width * .05),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Consumer<LoadDataUser>(builder: (context, dataUser, child) {
-                final data = dataUser.data;
-                return Column(
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: screenSize.width * .05),
+        child: ListView(
+          children: [
+            Consumer<LoadDataUser>(builder: (context, dataUser, child) {
+              final data = dataUser.data;
+              return Padding(
+                padding: EdgeInsets.only(top: availableHeight * .05),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -190,55 +199,92 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: FontWeight.bold),
                     ),
                   ],
-                );
-              }),
-              SizedBox(height: availableHeight * .035),
-              Text(
-                'Pilih layanan',
-                style: GoogleFonts.poppins(
-                    fontSize: screenSize.width * .035,
-                    fontWeight: FontWeight.w600),
+                ),
+              );
+            }),
+            SizedBox(height: availableHeight * .035),
+            Text(
+              'Pilih layanan',
+              style: GoogleFonts.poppins(
+                  fontSize: screenSize.width * .035,
+                  fontWeight: FontWeight.w600),
+            ),
+            SizedBox(height: availableHeight * .025),
+            SizedBox(
+              height: availableHeight * .33,
+              width: double.infinity,
+              child: GridView.count(
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 1,
+                crossAxisCount: 4,
+                childAspectRatio: 3 / 4,
+                physics: const NeverScrollableScrollPhysics(),
+                children: _menuList(screenSize.width, availableHeight),
               ),
-              SizedBox(height: availableHeight * .025),
-              SizedBox(
-                height: availableHeight * .33,
-                width: double.infinity,
-                child: GridView.count(
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 1,
-                  crossAxisCount: 4,
-                  childAspectRatio: 3 / 4,
-                  children: _menuList(screenSize.width, availableHeight),
+            ),
+            Text(
+              'Promo Untukmu',
+              style: GoogleFonts.poppins(
+                  fontSize: screenSize.width * .035,
+                  fontWeight: FontWeight.w600),
+            ),
+            SizedBox(height: availableHeight * .025),
+            SizedBox(
+              height: availableHeight * .275,
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  },
+                ),
+                child: InfiniteCarousel.builder(
+                  controller: _controller,
+                  itemCount: _bannerList(availableHeight * .275).length,
+                  itemExtent: screenSize.width * .9,
+                  itemBuilder: (context, index, realIndex) {
+                    return _bannerList(availableHeight * .275)[index];
+                  },
                 ),
               ),
-              Text(
-                'Promo Untukmu',
-                style: GoogleFonts.poppins(
-                    fontSize: screenSize.width * .035,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: availableHeight * .025),
-              SizedBox(
-                height: availableHeight * .275,
-                child: ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context).copyWith(
-                    dragDevices: {
-                      PointerDeviceKind.touch,
-                      PointerDeviceKind.mouse,
-                    },
-                  ),
-                  child: InfiniteCarousel.builder(
-                    controller: _controller,
-                    itemCount: _bannerList(availableHeight * .275).length,
-                    itemExtent: screenSize.width * .9,
-                    itemBuilder: (context, index, realIndex) {
-                      return _bannerList(availableHeight * .275)[index];
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: availableHeight * .035),
+            Text(
+              'Rekomendasi Dokter',
+              style: GoogleFonts.poppins(
+                  fontSize: screenSize.width * .035,
+                  fontWeight: FontWeight.w600),
+            ),
+            SizedBox(height: availableHeight * .025),
+            Consumer<DokterProvider>(
+              builder: (context, value, child) {
+                var dataDokter = value.dokter;
+                return value.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : Column(
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: 5,
+                            itemBuilder: (BuildContext context, int index) {
+                              return DokterCard(
+                                  dataDokter: dataDokter,
+                                  index: index,
+                                  radius: screenSize.width * .09);
+                            },
+                          ),
+                          SizedBox(height: availableHeight * .025),
+                          TextButton(
+                              onPressed: () {
+                                tabBarProvider.setTabIndex(1);
+                              },
+                              child: const Text('Lihat Semua Dokter')),
+                        ],
+                      );
+              },
+            ),
+          ],
         ),
       ),
     );

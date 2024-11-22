@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:quickcare_app/providers/dokter_provider.dart';
 import 'package:quickcare_app/providers/tab_bar_provider.dart';
 import '../pages/account_page.dart';
 import '../pages/history_page.dart';
@@ -82,13 +83,15 @@ class _BottomNavbarState extends State<BottomNavbar> {
 
   @override
   void didChangeDependencies() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
       dynamic args = ModalRoute.of(context)!.settings.arguments;
       if (args != null) {
         args = args as Map<String, dynamic>;
-        final data = Provider.of<LoadDataUser>(context, listen: false);
-        data.setData(args);
+        final dataUser = Provider.of<LoadDataUser>(context, listen: false);
+        dataUser.setData(args);
       }
+      final dataDokter = Provider.of<DokterProvider>(context, listen: false);
+      await dataDokter.setDokter();
     });
 
     super.didChangeDependencies();
@@ -100,7 +103,6 @@ class _BottomNavbarState extends State<BottomNavbar> {
       body: Consumer<TabBarProvider>(
         builder: (context, provider, child) {
           _controller.index = provider.tabIndex;
-          print(provider.tabIndex);
           return PersistentTabView(
             context,
             controller: _controller,
@@ -109,7 +111,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
             handleAndroidBackButtonPress: false,
             resizeToAvoidBottomInset: true,
             stateManagement: true,
-            hideNavigationBarWhenKeyboardAppears: true,
+            hideNavigationBarWhenKeyboardAppears: false,
             padding: const EdgeInsets.only(top: 3, bottom: 8),
             backgroundColor: Colors.white,
             isVisible: true,

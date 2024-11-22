@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:quickcare_app/providers/dokter_provider.dart';
 import './providers/tab_bar_provider.dart';
 import './widgets/bottom_navbar.dart';
 import './pages/splash_screen_page.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: InputProvider()),
         ChangeNotifierProvider.value(value: LoadDataUser()),
         ChangeNotifierProvider.value(value: TabBarProvider()),
+        ChangeNotifierProvider.value(value: DokterProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -91,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   BuildTextField(
                     controller: fullNameController,
                     label: 'Nama Lengkap',
-                    icon: Icons.person,
+                    icon: const Icon(Icons.person),
                   ),
                   Consumer<InputProvider>(
                     builder: (context, value, child) {
@@ -126,7 +126,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   BuildTextField(
                     controller: nikController,
                     label: 'NIK',
-                    icon: Icons.credit_card,
+                    icon: const Icon(Icons.credit_card),
                     keyboardType: TextInputType.number,
                   ),
                   Consumer<InputProvider>(
@@ -162,7 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   BuildTextField(
                     controller: phoneController,
                     label: 'No Handphone',
-                    icon: Icons.phone,
+                    icon: const Icon(Icons.phone),
                     keyboardType: TextInputType.phone,
                   ),
                   Consumer<InputProvider>(
@@ -201,7 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: BuildTextField(
                     controller: birthDateController,
                     label: 'Tanggal Lahir',
-                    icon: Icons.calendar_today,
+                    icon: const Icon(Icons.calendar_today),
                     readOnly: true,
                   ),
                 ),
@@ -216,7 +216,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   BuildTextField(
                     controller: emailController,
                     label: 'Email',
-                    icon: Icons.email,
+                    icon: const Icon(Icons.email),
                     keyboardType: TextInputType.emailAddress,
                   ),
                   Consumer<InputProvider>(
@@ -253,7 +253,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     BuildTextField(
                       controller: passwordController,
                       label: 'Password',
-                      icon: Icons.lock,
+                      icon: const Icon(Icons.lock),
                       obscureText: provider.hidePass,
                       suffixIcon: IconButton(
                         onPressed: () {

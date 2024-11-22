@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                   BuildTextField(
                     controller: emailController,
                     label: 'Email',
-                    icon: Icons.email,
+                    icon: const Icon(Icons.email),
                     keyboardType: TextInputType.emailAddress,
                   ),
                   Consumer<InputProvider>(
@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                     BuildTextField(
                       controller: passwordController,
                       label: 'Password',
-                      icon: Icons.lock,
+                      icon: const Icon(Icons.lock),
                       obscureText: provider.hidePass,
                       suffixIcon: IconButton(
                         onPressed: () {
@@ -185,7 +185,8 @@ class _LoginPageState extends State<LoginPage> {
                           email: emailController.text,
                           password: passwordController.text);
                       if (loginProvider.user['error'] == null) {
-                        Navigator.pushNamed(context, BottomNavbar.routeName, arguments: loginProvider.user);
+                        Navigator.pushNamed(context, BottomNavbar.routeName,
+                            arguments: loginProvider.user);
                         // Navigator.pushReplacementNamed(
                         //     context, HomePage.routeName,
                         //     arguments: loginProvider.user);

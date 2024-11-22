@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quickcare_app/providers/dokter_provider.dart';
 import 'package:quickcare_app/utils/validate.dart';
 import '../providers/input_provider.dart';
 
@@ -8,20 +9,22 @@ class BuildTextField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.label,
-    required this.icon,
+    this.icon,
     this.readOnly = false,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.suffixIcon,
+    this.hintText,
   });
 
   final TextEditingController controller;
   final String label;
-  final IconData icon;
   final bool readOnly;
   final bool obscureText;
   final TextInputType keyboardType;
+  final Widget? icon;
   final Widget? suffixIcon;
+  final String? hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +45,19 @@ class BuildTextField extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(color: Colors.blue, width: 2),
             ),
-            prefixIcon: Icon(icon),
+            prefixIcon: icon,
             suffixIcon: suffixIcon,
+            hintText: hintText,
+            hintStyle: const TextStyle(color: Colors.grey),
           ),
           readOnly: readOnly,
           obscureText: obscureText,
           keyboardType: keyboardType,
           onChanged: (value) async {
+            if (label == 'Pencarian') {
+              Provider.of<DokterProvider>(context, listen: false)
+                  .searchDokter(value);
+            }
             dynamic result;
             try {
               switch (label) {

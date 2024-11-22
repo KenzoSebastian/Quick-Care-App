@@ -44,6 +44,7 @@ dependencies:
   loading_indicator: ^3.1.1
   persistent_bottom_nav_bar: ^6.2.1
   infinite_carousel: ^1.1.1
+  random_x: ^0.3.1
 
 dev_dependencies:
   flutter_test:
