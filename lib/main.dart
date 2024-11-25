@@ -79,7 +79,8 @@ class MyApp extends StatelessWidget {
             centerTitle: true,
           ),
         ),
-        initialRoute: SplashPage.routeName,
+        // initialRoute: SplashPage.routeName,
+        initialRoute: BottomNavbar.routeName,
         routes: {
           SplashPage.routeName: (_) => const SplashPage(),
           IntroPage.routeName: (_) => const IntroPage(),
