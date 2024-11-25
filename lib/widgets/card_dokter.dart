@@ -5,13 +5,15 @@ class DokterCard extends StatelessWidget {
   const DokterCard({
     super.key,
     required this.dataDokter,
-    required this.index,
+    required this.routeName,
     required this.radius,
+    this.onTap,
   });
 
-  final List<Map<String, dynamic>> dataDokter;
-  final int index;
+  final Map<String, dynamic> dataDokter;
+  final String routeName;
   final double radius;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +22,14 @@ class DokterCard extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             radius: radius,
-            child: Image.network(dataDokter[index]['url_foto'] ?? ''),
+            child: Hero(
+                tag: '$routeName ${dataDokter['id']}',
+                child: Image.network(dataDokter['url_foto'] ?? '')),
           ),
-          title: Text(dataDokter[index]['nama'] ?? 'nama dokter'),
-          subtitle: Text(dataDokter[index]['spesialis'] ?? 'spesialis dokter'),
-          trailing: Text(Formatter.rupiah(dataDokter[index]['harga'] ?? 0)),
+          title: Text(dataDokter['nama'] ?? 'nama dokter'),
+          subtitle: Text(dataDokter['spesialis'] ?? 'spesialis dokter'),
+          trailing: Text(Formatter.rupiah(dataDokter['harga'] ?? 0)),
+          onTap: onTap,
         ));
   }
 }

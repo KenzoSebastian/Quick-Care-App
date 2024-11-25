@@ -3,15 +3,19 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:quickcare_app/pages/detail_dokter_page.dart';
 import 'package:quickcare_app/providers/dashboard_provider.dart';
 import 'package:quickcare_app/providers/dokter_provider.dart';
 import 'package:quickcare_app/providers/tab_bar_provider.dart';
 import 'package:quickcare_app/widgets/card_dokter.dart';
+import 'package:quickcare_app/widgets/weather_widget.dart';
 import '../widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  static const routeName = '/home';
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -183,21 +187,27 @@ class _HomePageState extends State<HomePage> {
               final data = dataUser.data;
               return Padding(
                 padding: EdgeInsets.only(top: availableHeight * .05),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      greeting,
-                      style: GoogleFonts.poppins(
-                          fontSize: screenSize.width * .04,
-                          fontWeight: FontWeight.w500),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          greeting,
+                          style: GoogleFonts.poppins(
+                              fontSize: screenSize.width * .04,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          "${data['nama'] ?? 'Unknown'}",
+                          style: GoogleFonts.poppins(
+                              fontSize: screenSize.width * .06,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    Text(
-                      "${data['nama'] ?? 'Unknown'}",
-                      style: GoogleFonts.poppins(
-                          fontSize: screenSize.width * .06,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    const WeatherWidget()
                   ],
                 ),
               );
@@ -269,9 +279,21 @@ class _HomePageState extends State<HomePage> {
                             itemCount: 5,
                             itemBuilder: (BuildContext context, int index) {
                               return DokterCard(
-                                  dataDokter: dataDokter,
-                                  index: index,
-                                  radius: screenSize.width * .09);
+                                dataDokter: dataDokter[index],
+                                routeName: HomePage.routeName,
+                                radius: screenSize.width * .09,
+                                onTap: () {
+                                  PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen: DetailDokterPage(
+                                        dataDokter: dataDokter[index],
+                                        routeFrom: HomePage.routeName),
+                                    withNavBar: false,
+                                    pageTransitionAnimation:
+                                        PageTransitionAnimation.fade,
+                                  );
+                                },
+                              );
                             },
                           ),
                           SizedBox(height: availableHeight * .025),

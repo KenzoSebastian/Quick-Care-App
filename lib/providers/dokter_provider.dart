@@ -18,7 +18,7 @@ class DokterProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     final response = await supabase.from('Dokter').select('*');
-    var shuffleData = Shuffle.shuffle(response);
+    var shuffleData = RandomData.shuffle(response);
     _dokter.clear();
     _dokter.addAll(shuffleData);
     _isLoading = false;

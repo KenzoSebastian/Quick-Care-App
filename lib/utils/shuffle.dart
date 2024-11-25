@@ -1,6 +1,7 @@
 import 'dart:math';
+// import 'package:random_x/random_x.dart';
 
-class Shuffle {
+class RandomData {
   static List<T> shuffle<T>(List<T> list) {
     final random = Random();
     for (int i = list.length - 1; i > 0; i--) {

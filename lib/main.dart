@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:quickcare_app/providers/dokter_provider.dart';
+import './providers/dokter_provider.dart';
 import './providers/tab_bar_provider.dart';
 import './widgets/bottom_navbar.dart';
 import './pages/splash_screen_page.dart';
@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
             centerTitle: true,
           ),
         ),
-        initialRoute: SplashPage.routeName,
+        initialRoute: BottomNavbar.routeName,
         routes: {
           SplashPage.routeName: (_) => const SplashPage(),
           IntroPage.routeName: (_) => const IntroPage(),

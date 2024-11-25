@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:quickcare_app/pages/detail_dokter_page.dart';
+import 'package:quickcare_app/pages/order_dokter_page.dart';
 import 'package:quickcare_app/providers/dokter_provider.dart';
 import 'package:quickcare_app/providers/tab_bar_provider.dart';
 import '../pages/account_page.dart';
@@ -28,23 +30,23 @@ class _BottomNavbarState extends State<BottomNavbar> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: const Icon(
-          Icons.home,
-          size: 30,
-        ),
-        title: ("Home"),
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.grey[400],
-      ),
+          icon: const Icon(
+            Icons.home,
+            size: 30,
+          ),
+          title: ("Home"),
+          activeColorPrimary: Colors.blue,
+          inactiveColorPrimary: Colors.grey[400],
+          routeAndNavigatorSettings: _routeMain()),
       PersistentBottomNavBarItem(
-        icon: const Icon(
-          Icons.search,
-          size: 30,
-        ),
-        title: ("Search"),
-        activeColorPrimary: Colors.green,
-        inactiveColorPrimary: Colors.grey[400],
-      ),
+          icon: const Icon(
+            Icons.search,
+            size: 30,
+          ),
+          title: ("Search"),
+          activeColorPrimary: Colors.green,
+          inactiveColorPrimary: Colors.grey[400],
+          routeAndNavigatorSettings: _routeMain()),
       PersistentBottomNavBarItem(
         icon: const Icon(
           Icons.history,
@@ -66,6 +68,11 @@ class _BottomNavbarState extends State<BottomNavbar> {
     ];
   }
 
+  RouteAndNavigatorSettings _routeMain() => RouteAndNavigatorSettings(routes: {
+        DetailDokterPage.routeName: (_) => const DetailDokterPage(),
+        OrderDokter.routeName: (_) => const OrderDokter(),
+      });
+
   NavBarAnimationSettings _AnimationSetting() => const NavBarAnimationSettings(
         navBarItemAnimation: ItemAnimationSettings(
           duration: Duration(milliseconds: 400),
@@ -81,17 +88,18 @@ class _BottomNavbarState extends State<BottomNavbar> {
   final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
 
+  bool isDataInit = false;
   @override
   void didChangeDependencies() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async{
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (isDataInit) return;
       dynamic args = ModalRoute.of(context)!.settings.arguments;
       if (args != null) {
         args = args as Map<String, dynamic>;
-        final dataUser = Provider.of<LoadDataUser>(context, listen: false);
-        dataUser.setData(args);
+        Provider.of<LoadDataUser>(context, listen: false).setData(args);
       }
-      final dataDokter = Provider.of<DokterProvider>(context, listen: false);
-      await dataDokter.setDokter();
+      await Provider.of<DokterProvider>(context, listen: false).setDokter();
+      isDataInit = true;
     });
 
     super.didChangeDependencies();
@@ -103,6 +111,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
       body: Consumer<TabBarProvider>(
         builder: (context, provider, child) {
           _controller.index = provider.tabIndex;
+          print(_controller.index);
           return PersistentTabView(
             context,
             controller: _controller,

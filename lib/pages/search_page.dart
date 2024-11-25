@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:quickcare_app/pages/detail_dokter_page.dart';
 import 'package:quickcare_app/providers/dokter_provider.dart';
 import 'package:quickcare_app/widgets/build_text_field.dart';
 import 'package:quickcare_app/widgets/card_dokter.dart';
@@ -76,10 +78,23 @@ class _SearchPageState extends State<SearchPage> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     return DokterCard(
-                        dataDokter:
-                            controllerSearch.text != '' ? dokterFilter : dokter,
-                        index: index,
-                        radius: screenSize.width * 0.09);
+                      dataDokter:
+                          controllerSearch.text != '' ? dokterFilter[index] : dokter[index],
+                      routeName: SearchPage.routeName,
+                      radius: screenSize.width * 0.09,
+                      onTap: () {
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: DetailDokterPage(
+                              dataDokter: controllerSearch.text != ''
+                                  ? dokterFilter[index]
+                                  : dokter[index],
+                              routeFrom: SearchPage.routeName),
+                          withNavBar: false,
+                          pageTransitionAnimation: PageTransitionAnimation.fade,
+                        );
+                      },
+                    );
                   },
                 );
               }
