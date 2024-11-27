@@ -207,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    const WeatherWidget()
+                    WeatherWidget(width: screenSize.width),
                   ],
                 ),
               );

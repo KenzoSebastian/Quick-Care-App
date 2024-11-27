@@ -46,6 +46,8 @@ dependencies:
   infinite_carousel: ^1.1.1
   random_x: ^0.3.1
   weather_animation: ^1.1.1
+  weather: ^3.1.1
+  geolocator: ^13.0.2
 
 dev_dependencies:
   flutter_test:

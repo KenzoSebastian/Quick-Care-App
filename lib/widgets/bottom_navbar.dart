@@ -4,12 +4,15 @@ import 'package:quickcare_app/pages/detail_dokter_page.dart';
 import 'package:quickcare_app/pages/order_dokter_page.dart';
 import 'package:quickcare_app/providers/dokter_provider.dart';
 import 'package:quickcare_app/providers/tab_bar_provider.dart';
+import 'package:weather/weather.dart';
 import '../pages/account_page.dart';
 import '../pages/history_page.dart';
 import '../pages/home_page.dart';
 import 'package:provider/provider.dart';
 import '../providers/dashboard_provider.dart';
 import '../pages/search_page.dart';
+import '../providers/weather_provider.dart';
+import '../utils/location.dart';
 
 class BottomNavbar extends StatefulWidget {
   const BottomNavbar({super.key});
@@ -99,6 +102,22 @@ class _BottomNavbarState extends State<BottomNavbar> {
         Provider.of<LoadDataUser>(context, listen: false).setData(args);
       }
       await Provider.of<DokterProvider>(context, listen: false).setDokter();
+      Location location = const Location();
+      Weather? weather = await location.getWeather();
+      weather == null
+          ? null
+          : Provider.of<WeatherProvider>(context, listen: false)
+              .setDataWeather({
+              'areaName': weather.areaName,
+              'cloudiness': weather.cloudiness,
+              'country': weather.country,
+              'date': weather.date,
+              'humidity': weather.humidity,
+              'latitude': weather.latitude,
+              'longitude': weather.longitude,
+              'temperature': weather.temperature,
+              'weatherDescription': weather.weatherDescription,
+            });
       isDataInit = true;
     });
 

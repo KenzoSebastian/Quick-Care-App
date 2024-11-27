@@ -3,7 +3,6 @@
         android:label="Quick Care"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-		
         android:enableOnBackInvokedCallback="true">
         <activity
             android:name=".MainActivity"
@@ -44,4 +43,8 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+
+    <!-- Permissions for location access -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 </manifest>
