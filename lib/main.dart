@@ -15,6 +15,7 @@ import './providers/login_provider.dart';
 import './providers/register_provider.dart';
 import './pages/login_page.dart';
 import './pages/intro_page.dart';
+import 'providers/riwayat_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: TabBarProvider()),
         ChangeNotifierProvider.value(value: DokterProvider()),
         ChangeNotifierProvider.value(value: WeatherProvider()),
+        ChangeNotifierProvider.value(value: RiwayatProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -81,7 +83,7 @@ class MyApp extends StatelessWidget {
             centerTitle: true,
           ),
         ),
-        initialRoute: BottomNavbar.routeName,
+        initialRoute: SplashPage.routeName,
         routes: {
           SplashPage.routeName: (_) => const SplashPage(),
           IntroPage.routeName: (_) => const IntroPage(),

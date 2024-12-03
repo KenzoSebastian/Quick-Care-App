@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickcare_app/widgets/animate_fade.dart';
 import '../utils/formatter.dart';
 
 class DokterCard extends StatelessWidget {
@@ -17,19 +18,41 @@ class DokterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        elevation: 5,
-        child: ListTile(
-          leading: CircleAvatar(
-            radius: radius,
-            child: Hero(
-                tag: '$routeName ${dataDokter['id']}',
-                child: Image.network(dataDokter['url_foto'] ?? '')),
-          ),
-          title: Text(dataDokter['nama'] ?? 'nama dokter'),
-          subtitle: Text(dataDokter['spesialis'] ?? 'spesialis dokter'),
-          trailing: Text(Formatter.rupiah(dataDokter['harga'] ?? 0)),
-          onTap: onTap,
-        ));
+    return AnimatedFade(
+      child: Card(
+          elevation: 5,
+          child: ListTile(
+            leading: CircleAvatar(
+              radius: radius,
+              child: Hero(
+                tag: '${dataDokter['id']} $routeName',
+                child: Image.network(
+                  dataDokter['url_foto'] ?? '',
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                (loadingProgress.expectedTotalBytes ?? 1)
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (BuildContext context, Object error,
+                      StackTrace? stackTrace) {
+                        return Image.asset('assets/images/dokter.png');
+                    // return const Text('Gambar error', style: TextStyle(fontSize: 12, color: Colors.red));
+                  },
+                ),
+              ),
+            ),
+            title: Text(dataDokter['nama'] ?? 'nama dokter'),
+            subtitle: Text(dataDokter['spesialis'] ?? 'spesialis dokter'),
+            trailing: Text(Formatter.rupiah(dataDokter['harga'] ?? 0)),
+            onTap: onTap,
+          )),
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather/weather.dart';
 
@@ -33,7 +34,8 @@ class Location {
   }
 
   Future<Weather?> getWeather() async {
-    const String key = "fb91b00e83e338d375e858c81e6f28de";
+    await dotenv.load(fileName: ".env");
+    String key = '${dotenv.env['WEATHER_API_KEY']}';
     WeatherFactory wf = WeatherFactory(key);
     try {
       Position position = await _determinePosition();

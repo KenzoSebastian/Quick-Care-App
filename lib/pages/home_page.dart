@@ -9,6 +9,8 @@ import 'package:quickcare_app/pages/detail_dokter_page.dart';
 import 'package:quickcare_app/providers/dashboard_provider.dart';
 import 'package:quickcare_app/providers/dokter_provider.dart';
 import 'package:quickcare_app/providers/tab_bar_provider.dart';
+import 'package:quickcare_app/widgets/animate_fade.dart';
+import 'package:quickcare_app/widgets/animate_scale.dart';
 import 'package:quickcare_app/widgets/card_dokter.dart';
 import 'package:quickcare_app/widgets/weather_widget.dart';
 import '../widgets/drawer.dart';
@@ -55,54 +57,86 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> _menuList(double width, double height) => [
-        _itemList(
-            icon: const Icon(Icons.chat),
-            title: "Chat dengan dokter",
-            width: width,
-            height: height,
-            onTap: () {}),
-        _itemList(
-            icon: const Icon(Icons.local_pharmacy),
-            title: "Toko Obat",
-            width: width,
-            height: height,
-            onTap: () {}),
-        _itemList(
-            icon: const Icon(Icons.medical_services),
-            title: "HomeLab & Vaksinasi",
-            width: width,
-            height: height,
-            onTap: () {}),
-        _itemList(
-            icon: const Icon(Icons.hearing),
-            title: "THT",
-            width: width,
-            height: height,
-            onTap: () {}),
-        _itemList(
-            icon: const Icon(Icons.emoji_emotions),
-            title: "Kesehatan Mental",
-            width: width,
-            height: height,
-            onTap: () {}),
-        _itemList(
-            icon: const Icon(Icons.face),
-            title: "HaloSkin",
-            width: width,
-            height: height,
-            onTap: () {}),
-        _itemList(
-            icon: const Icon(Icons.favorite),
-            title: "Kesehatan Seksual",
-            width: width,
-            height: height,
-            onTap: () {}),
-        _itemList(
-            icon: const Icon(Icons.remove_red_eye),
-            title: "Kesehatan Mata",
-            width: width,
-            height: height,
-            onTap: () {}),
+        AnimatedScaleCustom(
+          duration: 300,
+          delay: 300,
+          child: _itemList(
+              icon: const Icon(Icons.chat),
+              title: "Chat dengan dokter",
+              width: width,
+              height: height,
+              onTap: () {}),
+        ),
+        AnimatedScaleCustom(
+          duration: 300,
+          delay: 400,
+          child: _itemList(
+              icon: const Icon(Icons.local_pharmacy),
+              title: "Toko Obat",
+              width: width,
+              height: height,
+              onTap: () {}),
+        ),
+        AnimatedScaleCustom(
+          duration: 300,
+          delay: 500,
+          child: _itemList(
+              icon: const Icon(Icons.medical_services),
+              title: "HomeLab & Vaksinasi",
+              width: width,
+              height: height,
+              onTap: () {}),
+        ),
+        AnimatedScaleCustom(
+          duration: 300,
+          delay: 600,
+          child: _itemList(
+              icon: const Icon(Icons.hearing),
+              title: "THT",
+              width: width,
+              height: height,
+              onTap: () {}),
+        ),
+        AnimatedScaleCustom(
+          duration: 300,
+          delay: 700,
+          child: _itemList(
+              icon: const Icon(Icons.emoji_emotions),
+              title: "Kesehatan Mental",
+              width: width,
+              height: height,
+              onTap: () {}),
+        ),
+        AnimatedScaleCustom(
+          duration: 300,
+          delay: 800,
+          child: _itemList(
+              icon: const Icon(Icons.face),
+              title: "HaloSkin",
+              width: width,
+              height: height,
+              onTap: () {}),
+        ),
+        AnimatedScaleCustom(
+          duration: 300,
+          delay: 900,
+          child: _itemList(
+              icon: const Icon(Icons.favorite),
+              title: "Kesehatan Seksual",
+              width: width,
+              height: height,
+              onTap: () {}),
+        ),
+        AnimatedScaleCustom(
+          duration: 300,
+          delay: 1000,
+          child: _itemList(
+              icon: const Icon(Icons.remove_red_eye),
+              title: "Kesehatan Mata",
+              width: width,
+              height: height,
+              onTap: () {}),
+        ),
       ];
 
   List<Widget> _bannerList(height) => [
@@ -149,9 +183,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    final appBarHeight = AppBar().preferredSize.height;
-    final availableHeight = screenSize.height - appBarHeight;
+    final Size screenSize = MediaQuery.of(context).size;
+    final double appBarHeight = AppBar().preferredSize.height;
+    final double availableHeight = screenSize.height - appBarHeight;
     final TabBarProvider tabBarProvider =
         Provider.of<TabBarProvider>(context, listen: false);
 
@@ -168,7 +202,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Text('Beranda'),
+        title: const AnimatedFade(
+          delay: 50,
+          child: Text('Beranda'),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -193,31 +230,40 @@ class _HomePageState extends State<HomePage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          greeting,
-                          style: GoogleFonts.poppins(
-                              fontSize: screenSize.width * .04,
-                              fontWeight: FontWeight.w500),
+                        AnimatedFade(
+                          delay: 100,
+                          child: Text(
+                            greeting,
+                            style: GoogleFonts.poppins(
+                                fontSize: screenSize.width * .04,
+                                fontWeight: FontWeight.w500),
+                          ),
                         ),
-                        Text(
-                          "${data['nama'] ?? 'Unknown'}",
-                          style: GoogleFonts.poppins(
-                              fontSize: screenSize.width * .06,
-                              fontWeight: FontWeight.bold),
+                        AnimatedFade(
+                          delay: 150,
+                          child: Text(
+                            "${data['nama'] ?? 'Unknown'}",
+                            style: GoogleFonts.poppins(
+                                fontSize: screenSize.width * .06,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ],
                     ),
-                    WeatherWidget(width: screenSize.width),
+                    AnimatedFade(delay: 200, child: WeatherWidget(width: screenSize.width)),
                   ],
                 ),
               );
             }),
             SizedBox(height: availableHeight * .035),
-            Text(
-              'Pilih layanan',
-              style: GoogleFonts.poppins(
-                  fontSize: screenSize.width * .035,
-                  fontWeight: FontWeight.w600),
+            AnimatedFade(
+              delay: 250,
+              child: Text(
+                'Pilih layanan',
+                style: GoogleFonts.poppins(
+                    fontSize: screenSize.width * .035,
+                    fontWeight: FontWeight.w600),
+              ),
             ),
             SizedBox(height: availableHeight * .025),
             SizedBox(
@@ -232,38 +278,47 @@ class _HomePageState extends State<HomePage> {
                 children: _menuList(screenSize.width, availableHeight),
               ),
             ),
-            Text(
-              'Promo Untukmu',
-              style: GoogleFonts.poppins(
-                  fontSize: screenSize.width * .035,
-                  fontWeight: FontWeight.w600),
+            AnimatedFade(
+              delay: 1100,
+              child: Text(
+                'Promo Untukmu',
+                style: GoogleFonts.poppins(
+                    fontSize: screenSize.width * .035,
+                    fontWeight: FontWeight.w600),
+              ),
             ),
             SizedBox(height: availableHeight * .025),
-            SizedBox(
-              height: availableHeight * .275,
-              child: ScrollConfiguration(
-                behavior: ScrollConfiguration.of(context).copyWith(
-                  dragDevices: {
-                    PointerDeviceKind.touch,
-                    PointerDeviceKind.mouse,
-                  },
-                ),
-                child: InfiniteCarousel.builder(
-                  controller: _controller,
-                  itemCount: _bannerList(availableHeight * .275).length,
-                  itemExtent: screenSize.width * .9,
-                  itemBuilder: (context, index, realIndex) {
-                    return _bannerList(availableHeight * .275)[index];
-                  },
+            AnimatedFade(
+              delay: 1200,
+              child: SizedBox(
+                height: availableHeight * .275,
+                child: ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context).copyWith(
+                    dragDevices: {
+                      PointerDeviceKind.touch,
+                      PointerDeviceKind.mouse,
+                    },
+                  ),
+                  child: InfiniteCarousel.builder(
+                    controller: _controller,
+                    itemCount: _bannerList(availableHeight * .275).length,
+                    itemExtent: screenSize.width * .8999,
+                    itemBuilder: (context, index, realIndex) {
+                      return _bannerList(availableHeight * .275)[index];
+                    },
+                  ),
                 ),
               ),
             ),
             SizedBox(height: availableHeight * .035),
-            Text(
-              'Rekomendasi Dokter',
-              style: GoogleFonts.poppins(
-                  fontSize: screenSize.width * .035,
-                  fontWeight: FontWeight.w600),
+            AnimatedFade(
+              delay: 1300,
+              child: Text(
+                'Rekomendasi Dokter',
+                style: GoogleFonts.poppins(
+                    fontSize: screenSize.width * .035,
+                    fontWeight: FontWeight.w600),
+              ),
             ),
             SizedBox(height: availableHeight * .025),
             Consumer<DokterProvider>(
@@ -283,6 +338,7 @@ class _HomePageState extends State<HomePage> {
                                 routeName: HomePage.routeName,
                                 radius: screenSize.width * .09,
                                 onTap: () {
+                                  tabBarProvider.setTabIndex(0);
                                   PersistentNavBarNavigator.pushNewScreen(
                                     context,
                                     screen: DetailDokterPage(
@@ -296,7 +352,7 @@ class _HomePageState extends State<HomePage> {
                               );
                             },
                           ),
-                          SizedBox(height: availableHeight * .025),
+                          SizedBox(height: availableHeight * .020),
                           TextButton(
                               onPressed: () {
                                 tabBarProvider.setTabIndex(1);

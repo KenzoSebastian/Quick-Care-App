@@ -58,37 +58,36 @@ class IntroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Quick Care App'),
-        ),
-        body: IntroductionScreen(
-          pages: _slidesList,
-          showBackButton: false,
-          showNextButton: true,
-          showSkipButton: true,
-          skip: Text('Skip',
-              style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
-          next: const Icon(Icons.arrow_forward),
-          done: Text("Done",
-              style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
-          onDone: () {
-            Navigator.pushReplacementNamed(context, LoginPage.routeName);
-          },
-          dotsDecorator: DotsDecorator(
-            size: const Size.square(10.0),
-            activeSize: const Size(20.0, 10.0),
-            activeColor: const Color(0xFF388E3C),
-            color: Colors.black26,
-            spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-            activeShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0)),
+        body: SafeArea(
+          child: IntroductionScreen(
+            pages: _slidesList,
+            showBackButton: false,
+            showNextButton: true,
+            showSkipButton: true,
+            skip: Text('Skip',
+                style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+            next: const Icon(Icons.arrow_forward),
+            done: Text("Done",
+                style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+            onDone: () {
+              Navigator.pushReplacementNamed(context, LoginPage.routeName);
+            },
+            dotsDecorator: DotsDecorator(
+              size: const Size.square(10.0),
+              activeSize: const Size(20.0, 10.0),
+              activeColor: const Color(0xFF388E3C),
+              color: Colors.black26,
+              spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+              activeShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.0)),
+            ),
+            baseBtnStyle: TextButton.styleFrom(
+              backgroundColor: Colors.white.withOpacity(0),
+            ),
+            skipStyle: TextButton.styleFrom(foregroundColor: Colors.red),
+            doneStyle: TextButton.styleFrom(foregroundColor: Colors.green),
+            nextStyle: TextButton.styleFrom(foregroundColor: Colors.blue),
           ),
-          baseBtnStyle: TextButton.styleFrom(
-            backgroundColor: Colors.white.withOpacity(0),
-          ),
-          skipStyle: TextButton.styleFrom(foregroundColor: Colors.red),
-          doneStyle: TextButton.styleFrom(foregroundColor: Colors.green),
-          nextStyle: TextButton.styleFrom(foregroundColor: Colors.blue),
         ));
   }
 }

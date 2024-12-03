@@ -4,6 +4,8 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:quickcare_app/pages/order_dokter_page.dart';
 import 'package:quickcare_app/utils/formatter.dart';
 
+import '../widgets/animate_fade.dart';
+
 class DetailDokterPage extends StatelessWidget {
   const DetailDokterPage({super.key, this.dataDokter, this.routeFrom});
   static const routeName = '/detail-dokter';
@@ -18,7 +20,7 @@ class DetailDokterPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey[600],
-        title: const Text('Detail Dokter'),
+        title: const AnimatedFade(delay: 50, child: Text('Detail Dokter')),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -45,84 +47,121 @@ class DetailDokterPage extends StatelessWidget {
                         ],
                       ),
                       child: Hero(
-                        tag: '$routeFrom ${dataDokter!['id']}',
-                        child: SizedBox(
+                        tag: '${dataDokter!['id']} $routeFrom',
+                        child: Image.network(
+                          dataDokter!['url_foto'] ?? '',
                           height: availableHeight * .3,
-                          child: Image.network(
-                            dataDokter!['url_foto'] ?? '',
-                          ),
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        (loadingProgress.expectedTotalBytes ??
+                                            1)
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (BuildContext context, Object error,
+                              StackTrace? stackTrace) {
+                            return Image.asset('assets/images/dokter.png');
+                          },
                         ),
                       ),
                     ),
                     SizedBox(height: availableHeight * .025),
-                    Text(
-                      dataDokter!['nama'] ?? 'nama dokter',
-                      style: GoogleFonts.poppins(
-                          fontSize: screenSize.width * .06,
-                          fontWeight: FontWeight.bold),
+                    AnimatedFade(
+                      delay: 100,
+                      child: Text(
+                        dataDokter!['nama'] ?? 'nama dokter',
+                        style: GoogleFonts.poppins(
+                            fontSize: screenSize.width * .06,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                     SizedBox(height: availableHeight * .007),
-                    Text(
-                      dataDokter!['spesialis'] ?? 'spesialis dokter',
-                      style: GoogleFonts.poppins(
-                        fontSize: screenSize.width * .04,
+                    AnimatedFade(
+                      delay: 200,
+                      child: Text(
+                        dataDokter!['spesialis'] ?? 'spesialis dokter',
+                        style: GoogleFonts.poppins(
+                          fontSize: screenSize.width * .04,
+                        ),
                       ),
                     ),
                     SizedBox(height: availableHeight * .025),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(Formatter.rupiah(dataDokter!['harga'] ?? 0),
-                            style: GoogleFonts.poppins(
-                              fontSize: screenSize.width * .05,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        ElevatedButton(
-                            onPressed: () {
-                              PersistentNavBarNavigator.pushNewScreen(
-                                context,
-                              screen: OrderDokter(
-                                dataDokter: dataDokter!,
-                                routeFrom: routeFrom,
+                        AnimatedFade(
+                          delay: 300,
+                          child: Text(Formatter.rupiah(dataDokter!['harga'] ?? 0),
+                              style: GoogleFonts.poppins(
+                                fontSize: screenSize.width * .05,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
+                        AnimatedFade(
+                          delay: 400,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen: OrderDokter(
+                                    dataDokter: dataDokter!,
+                                    routeFrom: routeFrom,
+                                  ),
+                                  pageTransitionAnimation:
+                                      PageTransitionAnimation.fade,
+                                  withNavBar: true,
+                                );
+                              },
+                              style: const ButtonStyle(
+                                backgroundColor:
+                                    WidgetStatePropertyAll(Colors.green),
+                                shape: WidgetStatePropertyAll(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)))),
                               ),
-                                pageTransitionAnimation:
-                                    PageTransitionAnimation.fade,
-                                withNavBar: true,
-                              );
-                            },
-                            style: const ButtonStyle(
-                              backgroundColor:
-                                  WidgetStatePropertyAll(Colors.green),
-                              shape: WidgetStatePropertyAll(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10)))),
-                            ),
-                            child: const Text('Pesan Sekarang',
-                                style: TextStyle(color: Colors.white))),
+                              child: const Text('Pesan Sekarang',
+                                  style: TextStyle(color: Colors.white))),
+                        ),
                       ],
                     ),
                     Divider(
                       height: availableHeight * .04,
                       color: Colors.black,
                     ),
-                    _deskripsiDokter(
-                        screenSize: screenSize,
-                        icon: const Icon(Icons.school),
-                        title: 'Alumni',
-                        dataDokter: dataDokter!['alumni'] ?? ''),
+                    AnimatedFade(
+                      delay: 500,
+                      child: _deskripsiDokter(
+                          screenSize: screenSize,
+                          icon: const Icon(Icons.school),
+                          title: 'Alumni',
+                          dataDokter: dataDokter!['alumni'] ?? ''),
+                    ),
                     SizedBox(height: availableHeight * .025),
-                    _deskripsiDokter(
-                        screenSize: screenSize,
-                        icon: const Icon(Icons.location_on),
-                        title: 'Tempat Praktek',
-                        dataDokter: dataDokter!['tempat_praktek'] ?? ''),
+                    AnimatedFade(
+                      delay: 600,
+                      child: _deskripsiDokter(
+                          screenSize: screenSize,
+                          icon: const Icon(Icons.location_on),
+                          title: 'Tempat Praktek',
+                          dataDokter: dataDokter!['tempat_praktek'] ?? ''),
+                    ),
                     SizedBox(height: availableHeight * .025),
-                    _deskripsiDokter(
-                        screenSize: screenSize,
-                        icon: const Icon(Icons.work),
-                        title: 'Pengalaman',
-                        dataDokter: '${dataDokter!['pengalaman']} Tahun'),
+                    AnimatedFade(
+                      delay: 700,
+                      child: _deskripsiDokter(
+                          screenSize: screenSize,
+                          icon: const Icon(Icons.work),
+                          title: 'Pengalaman',
+                          dataDokter: '${dataDokter!['pengalaman']} Tahun'),
+                    ),
                   ]),
             )
           ],
@@ -131,36 +170,24 @@ class DetailDokterPage extends StatelessWidget {
     );
   }
 
-  Row _deskripsiDokter(
+  Widget _deskripsiDokter(
       {required Size screenSize,
       required Icon icon,
       required String title,
       required String dataDokter}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        icon,
-        const SizedBox(width: 15),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: GoogleFonts.poppins(
-                fontSize: screenSize.width * .05,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: screenSize.height * .01),
-            Text(
-              dataDokter,
-              style: GoogleFonts.poppins(
-                fontSize: screenSize.width * .04,
-              ),
-            ),
-          ],
+    return ListTile(
+      leading: icon,
+      title: Text(title,
+          style: GoogleFonts.poppins(
+            fontSize: screenSize.width * .05,
+            fontWeight: FontWeight.bold,
+          )),
+      subtitle: Text(
+        dataDokter,
+        style: GoogleFonts.poppins(
+          fontSize: screenSize.width * .04,
         ),
-      ],
+      ),
     );
   }
 }

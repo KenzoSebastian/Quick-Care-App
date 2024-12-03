@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:quickcare_app/providers/weather_provider.dart';
-import 'package:quickcare_app/utils/location.dart';
-import 'package:weather/weather.dart';
 // import '../widgets/drawer.dart';
 
 class HistoryPage extends StatefulWidget {

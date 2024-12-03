@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:quickcare_app/pages/detail_dokter_page.dart';
-import 'package:quickcare_app/providers/dokter_provider.dart';
-import 'package:quickcare_app/widgets/build_text_field.dart';
-import 'package:quickcare_app/widgets/card_dokter.dart';
+import 'package:quickcare_app/widgets/animate_fade.dart';
+import '../pages/detail_dokter_page.dart';
+import '../providers/dokter_provider.dart';
+import '../widgets/build_text_field.dart';
+import '../widgets/card_dokter.dart';
+import '../providers/tab_bar_provider.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -22,10 +24,12 @@ class _SearchPageState extends State<SearchPage> {
     final screenSize = MediaQuery.of(context).size;
     final appBarHeight = AppBar().preferredSize.height;
     final availableHeight = screenSize.height - appBarHeight;
+    final TabBarProvider tabBarProvider =
+        Provider.of<TabBarProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text('search page'),
+        title: const AnimatedFade(delay: 50, child: Text('search page')),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -41,18 +45,24 @@ class _SearchPageState extends State<SearchPage> {
         child: ListView(children: [
           Padding(
             padding: EdgeInsets.only(top: availableHeight * .03),
-            child: Text(
-              'Cari Dokter',
-              style: GoogleFonts.poppins(
-                  fontSize: screenSize.width * .06,
-                  fontWeight: FontWeight.bold),
+            child: AnimatedFade(
+              delay: 100,
+              child: Text(
+                'Cari Dokter',
+                style: GoogleFonts.poppins(
+                    fontSize: screenSize.width * .06,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           SizedBox(height: availableHeight * .025),
-          BuildTextField(
-            controller: controllerSearch,
-            label: 'Pencarian',
-            hintText: 'Masukan nama dokter atau spesialis dokter',
+          AnimatedFade(
+            delay: 200,
+            child: BuildTextField(
+              controller: controllerSearch,
+              label: 'Pencarian',
+              hintText: 'Masukan nama dokter atau spesialis dokter',
+            ),
           ),
           SizedBox(height: availableHeight * .035),
           Consumer<DokterProvider>(
@@ -78,11 +88,13 @@ class _SearchPageState extends State<SearchPage> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     return DokterCard(
-                      dataDokter:
-                          controllerSearch.text != '' ? dokterFilter[index] : dokter[index],
+                      dataDokter: controllerSearch.text != ''
+                          ? dokterFilter[index]
+                          : dokter[index],
                       routeName: SearchPage.routeName,
                       radius: screenSize.width * 0.09,
                       onTap: () {
+                        tabBarProvider.setTabIndex(1);
                         PersistentNavBarNavigator.pushNewScreen(
                           context,
                           screen: DetailDokterPage(
