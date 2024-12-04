@@ -250,7 +250,9 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    AnimatedFade(delay: 200, child: WeatherWidget(width: screenSize.width)),
+                    AnimatedFade(
+                        delay: 200,
+                        child: WeatherWidget(width: screenSize.width)),
                   ],
                 ),
               );
@@ -324,6 +326,20 @@ class _HomePageState extends State<HomePage> {
             Consumer<DokterProvider>(
               builder: (context, value, child) {
                 var dataDokter = value.dokter;
+
+                if (dataDokter.isEmpty) {
+                  return Center(
+                    child: Text('Data dokter tidak tersedia.',
+                        style: GoogleFonts.poppins(color: Colors.red)),
+                  );
+                }
+
+                if (dataDokter[0]['error'] != null) {
+                  return Center(
+                    child: Text(dataDokter[0]['error'],
+                        style: GoogleFonts.poppins(color: Colors.red)),
+                  );
+                }
                 return value.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : Column(

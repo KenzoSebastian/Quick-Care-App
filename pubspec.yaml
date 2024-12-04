@@ -101,6 +101,7 @@ flutter:
     - assets\payments\gopay.png
     - assets\payments\dana.png
     - assets\payments\ovo.png
+    - assets\payments\success.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:quickcare_app/providers/riwayat_provider.dart';
 import 'package:quickcare_app/widgets/animate_scale.dart';
@@ -10,6 +11,8 @@ import 'package:quickcare_app/widgets/overlay_message.dart';
 import '../providers/dashboard_provider.dart';
 import '../utils/formatter.dart';
 import '../widgets/animate_fade.dart';
+import '../widgets/key_value_widget.dart';
+import 'succes_page.dart';
 
 class OrderDokter extends StatefulWidget {
   const OrderDokter({super.key, this.dataDokter, this.routeFrom});
@@ -212,33 +215,33 @@ class _OrderDokterState extends State<OrderDokter> {
                                 height: height * .03,
                                 color: Colors.black,
                               ),
-                              _itemDetailOrder(
+                              KeyValue(
                                   width: width,
-                                  key: "Nama Dokter",
+                                  keyword: "Nama Dokter",
                                   value: widget.dataDokter!["nama"]!),
                               SizedBox(height: height * .005),
-                              _itemDetailOrder(
+                              KeyValue(
                                   width: width,
-                                  key: "Tanggal Konsultasi",
+                                  keyword: "Tanggal Konsultasi",
                                   value: dateOrder),
                               SizedBox(height: height * .005),
-                              _itemDetailOrder(
+                              KeyValue(
                                   width: width,
-                                  key: "Waktu Konsultasi",
+                                  keyword: "Waktu Konsultasi",
                                   value: selectedTime!),
                               Divider(
                                 height: height * .04,
                                 color: Colors.black,
                               ),
-                              _itemDetailOrder(
+                              KeyValue(
                                   width: width,
-                                  key: "Biaya Konsultasi",
+                                  keyword: "Biaya Konsultasi",
                                   value: Formatter.rupiah(
                                       widget.dataDokter!['harga'] ?? 0)),
                               SizedBox(height: height * .005),
-                              _itemDetailOrder(
+                              KeyValue(
                                   width: width,
-                                  key: "Biaya Penanganan",
+                                  keyword: "Biaya Penanganan",
                                   value: Formatter.rupiah(biayaLayanan)),
                               Row(
                                 children: [
@@ -258,9 +261,9 @@ class _OrderDokterState extends State<OrderDokter> {
                                   ),
                                 ],
                               ),
-                              _itemDetailOrder(
+                              KeyValue(
                                   width: width,
-                                  key: "Total Biaya",
+                                  keyword: "Total Biaya",
                                   value: Formatter.rupiah(
                                       widget.dataDokter!['harga'] +
                                           biayaLayanan)),
@@ -318,11 +321,20 @@ class _OrderDokterState extends State<OrderDokter> {
                                     widget.dataDokter!['harga'] + biayaLayanan,
                                 'metode_pembayaran': selectedPaymentMethod,
                               });
-                              riwayatProvider.responsePayment.isEmpty
-                                  ? OverlayMessage().showOverlayMessage(
-                                      context, 'Transaksi Pembayaran Gagal')
-                                  : OverlayMessage().showOverlayMessage(
-                                      context, 'Transaksi Pembayaran Berhasil');
+                              if (riwayatProvider.responsePayment["error"] ==
+                                  null) {
+                                await riwayatProvider.setRiwayat();
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen: const SuccesPage(),
+                                  pageTransitionAnimation:
+                                      PageTransitionAnimation.fade,
+                                  withNavBar: false,
+                                );
+                              } else {
+                                OverlayMessage().showOverlayMessage(context,
+                                    riwayatProvider.responsePayment["error"]);
+                              }
                             }
                           });
                     }),
@@ -355,38 +367,6 @@ class _OrderDokterState extends State<OrderDokter> {
           ),
           child: Image.asset("assets/payments/${title.toLowerCase()}.png")),
     );
-  }
-
-  Row _itemDetailOrder(
-      {required double width, required String key, required String value}) {
-    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      SizedBox(
-        width: width * .38,
-        child: Text(
-          key,
-          style: GoogleFonts.ptSans(
-            fontSize: width * .04,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-      Text(
-        ':  ',
-        style: GoogleFonts.ptSans(
-          fontSize: width * .04,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-      Expanded(
-        child: Text(
-          value,
-          style: GoogleFonts.ptSans(
-            fontSize: width * .04,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-    ]);
   }
 
   Widget _timeCardItems({required double height, required double width}) {

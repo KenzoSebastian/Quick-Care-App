@@ -41,15 +41,13 @@ class RegisterProvider with ChangeNotifier {
           .single();
       _user.clear();
       _user.addAll(response);
-      notifyListeners();
     } on PostgrestException catch (e) {
       _user.clear();
       _user.addAll({'error': e.message});
-      notifyListeners();
     } catch (e) {
       _user.clear();
       _user.addAll({'error': e});
-      notifyListeners();
     }
+    notifyListeners();
   }
 }

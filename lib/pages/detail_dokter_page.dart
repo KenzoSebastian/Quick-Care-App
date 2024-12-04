@@ -116,7 +116,7 @@ class DetailDokterPage extends StatelessWidget {
                                   ),
                                   pageTransitionAnimation:
                                       PageTransitionAnimation.fade,
-                                  withNavBar: true,
+                                  withNavBar: false,
                                 );
                               },
                               style: const ButtonStyle(

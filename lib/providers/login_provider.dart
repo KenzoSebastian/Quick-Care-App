@@ -15,15 +15,13 @@ class LoginProvider with ChangeNotifier {
       await Validate.authenticationLogin(result: response, password: password);
       _user.clear();
       _user.addAll(response[0]);
-      notifyListeners();
     } on PostgrestException catch (e) {
       _user.clear();
       _user.addAll({'error': e.message});
-      notifyListeners();
     } catch (e) {
       _user.clear();
       _user.addAll({'error': e});
-      notifyListeners();
     }
+    notifyListeners();
   }
 }

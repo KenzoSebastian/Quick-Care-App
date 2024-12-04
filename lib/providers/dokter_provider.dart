@@ -17,10 +17,22 @@ class DokterProvider with ChangeNotifier {
   Future<void> setDokter() async {
     _isLoading = true;
     notifyListeners();
-    final response = await supabase.from('Dokter').select('*');
-    var shuffleData = RandomData.shuffle(response);
-    _dokter.clear();
-    _dokter.addAll(shuffleData);
+    try {
+      final response = await supabase.from('Dokter').select('*');
+      var shuffleData = RandomData.shuffle(response);
+      _dokter.clear();
+      _dokter.addAll(shuffleData);
+    } on PostgrestException catch (e) {
+      _dokter.clear();
+      _dokter.addAll([
+        {'error': e.message}
+      ]);
+    } catch (e) {
+      _dokter.clear();
+      _dokter.addAll([
+        {'error': e}
+      ]);
+    }
     _isLoading = false;
     notifyListeners();
   }

@@ -43,7 +43,6 @@ class DokterCard extends StatelessWidget {
                   errorBuilder: (BuildContext context, Object error,
                       StackTrace? stackTrace) {
                         return Image.asset('assets/images/dokter.png');
-                    // return const Text('Gambar error', style: TextStyle(fontSize: 12, color: Colors.red));
                   },
                 ),
               ),

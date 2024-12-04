@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:quickcare_app/pages/detail_dokter_page.dart';
 import 'package:quickcare_app/pages/order_dokter_page.dart';
+import 'package:quickcare_app/pages/succes_page.dart';
 import 'package:quickcare_app/providers/dokter_provider.dart';
 import 'package:quickcare_app/providers/tab_bar_provider.dart';
 import 'package:weather/weather.dart';
@@ -11,6 +12,7 @@ import '../pages/home_page.dart';
 import 'package:provider/provider.dart';
 import '../providers/dashboard_provider.dart';
 import '../pages/search_page.dart';
+import '../providers/riwayat_provider.dart';
 import '../providers/weather_provider.dart';
 import '../utils/location.dart';
 
@@ -74,6 +76,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
   RouteAndNavigatorSettings _routeMain() => RouteAndNavigatorSettings(routes: {
         DetailDokterPage.routeName: (_) => const DetailDokterPage(),
         OrderDokter.routeName: (_) => const OrderDokter(),
+        SuccesPage.routeName: (_) => const SuccesPage(),
       });
 
   NavBarAnimationSettings _AnimationSetting() => const NavBarAnimationSettings(
@@ -118,6 +121,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
               'temperature': weather.temperature,
               'weatherDescription': weather.weatherDescription,
             });
+      await Provider.of<RiwayatProvider>(context, listen: false).setRiwayat();
       isDataInit = true;
     });
 
@@ -130,7 +134,6 @@ class _BottomNavbarState extends State<BottomNavbar> {
       body: Consumer<TabBarProvider>(
         builder: (context, provider, child) {
           _controller.index = provider.tabIndex;
-          print(_controller.index);
           return PersistentTabView(
             context,
             controller: _controller,

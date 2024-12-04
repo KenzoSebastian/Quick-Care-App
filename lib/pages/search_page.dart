@@ -39,7 +39,6 @@ class _SearchPageState extends State<SearchPage> {
           )
         ],
       ),
-      // drawer: const MyDrawer(),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: screenSize.width * .05),
         child: ListView(children: [
@@ -69,47 +68,62 @@ class _SearchPageState extends State<SearchPage> {
             builder: (context, value, child) {
               final dokter = value.dokter;
               final dokterFilter = value.filterDokter;
+
+              if (dokter.isEmpty) {
+                return Center(
+                  child: Text('Data dokter tidak tersedia.',
+                      style: GoogleFonts.poppins(color: Colors.red)),
+                );
+              }
+
+              if (dokter[0]['error'] != null) {
+                return Center(
+                  child: Text(dokter[0]['error'],
+                      style: GoogleFonts.poppins(color: Colors.red)),
+                );
+              }
+
               if (value.isLoading) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (dokterFilter.isEmpty && controllerSearch.text != '') {
+              }
+              if (dokterFilter.isEmpty && controllerSearch.text != '') {
                 return Center(
                   child: Text(
-                    'Tidak ada dokter yang cocok',
+                    'Tidak ada dokter yang cocok bro',
                     style:
                         GoogleFonts.poppins(fontSize: screenSize.width * .04),
                   ),
                 );
-              } else {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: controllerSearch.text != ''
-                      ? dokterFilter.length
-                      : dokter.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    return DokterCard(
-                      dataDokter: controllerSearch.text != ''
-                          ? dokterFilter[index]
-                          : dokter[index],
-                      routeName: SearchPage.routeName,
-                      radius: screenSize.width * 0.09,
-                      onTap: () {
-                        tabBarProvider.setTabIndex(1);
-                        PersistentNavBarNavigator.pushNewScreen(
-                          context,
-                          screen: DetailDokterPage(
-                              dataDokter: controllerSearch.text != ''
-                                  ? dokterFilter[index]
-                                  : dokter[index],
-                              routeFrom: SearchPage.routeName),
-                          withNavBar: false,
-                          pageTransitionAnimation: PageTransitionAnimation.fade,
-                        );
-                      },
-                    );
-                  },
-                );
               }
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: controllerSearch.text != ''
+                    ? dokterFilter.length
+                    : dokter.length,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  return DokterCard(
+                    dataDokter: controllerSearch.text != ''
+                        ? dokterFilter[index]
+                        : dokter[index],
+                    routeName: SearchPage.routeName,
+                    radius: screenSize.width * 0.09,
+                    onTap: () {
+                      tabBarProvider.setTabIndex(1);
+                      PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: DetailDokterPage(
+                            dataDokter: controllerSearch.text != ''
+                                ? dokterFilter[index]
+                                : dokter[index],
+                            routeFrom: SearchPage.routeName),
+                        withNavBar: false,
+                        pageTransitionAnimation: PageTransitionAnimation.fade,
+                      );
+                    },
+                  );
+                },
+              );
             },
           ),
         ]),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../utils/update_riwayat.dart';
 
 class RiwayatProvider with ChangeNotifier {
   final supabase = Supabase.instance.client;
@@ -12,6 +13,7 @@ class RiwayatProvider with ChangeNotifier {
       var response = await supabase
           .from('Riwayat')
           .insert({
+            'created_at': DateTime.now().toString(),
             'id_dokter': data['id_dokter'],
             'id_users': data['id_users'],
             'tanggal_konsultasi': data['tanggal_konsultasi'],
@@ -24,12 +26,56 @@ class RiwayatProvider with ChangeNotifier {
           .single();
       _responsePayment.clear();
       _responsePayment.addAll(response);
-      notifyListeners();
     } on PostgrestException catch (e) {
-      print(e);
+      _responsePayment.clear();
+      _responsePayment.addAll({'error': e.message});
     } catch (e) {
-      print(e);
+      _responsePayment.clear();
+      _responsePayment.addAll({'error': e});
     }
+    notifyListeners();
+  }
 
+  final List<Map<String, dynamic>> _riwayat = [];
+  List<Map<String, dynamic>> get riwayat => _riwayat;
+
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
+
+  Future<void> setRiwayat() async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      var response = await supabase
+          .from('Riwayat')
+          .select(
+              'id, created_at, tanggal_konsultasi, waktu_konsultasi, biaya_penanganan, total_biaya, metode_pembayaran, is_done, Dokter(nama, spesialis, harga)')
+          .eq('id_users', 37)
+          .order('id', ascending: false);
+
+      await UpdateRiwayat().updateRiwayat(response);
+
+      var updatedResponse = await supabase
+          .from('Riwayat')
+          .select(
+              'id, created_at, tanggal_konsultasi, waktu_konsultasi, biaya_penanganan, total_biaya, metode_pembayaran, is_done, Dokter(nama, spesialis, harga)')
+          .eq('id_users', 37)
+          .order('id', ascending: false);
+
+      _riwayat.clear();
+      _riwayat.addAll(updatedResponse);
+    } on PostgrestException catch (e) {
+      _riwayat.clear();
+      _riwayat.addAll([
+        {'error': e.message}
+      ]);
+    } catch (e) {
+      _riwayat.clear();
+      _riwayat.addAll([
+        {'error': e}
+      ]);
+    }
+    _isLoading = false;
+    notifyListeners();
   }
 }
