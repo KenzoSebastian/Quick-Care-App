@@ -31,7 +31,7 @@ class UpdateRiwayat {
               .from('Riwayat')
               .update({'is_done': true}).eq('id', data[i]['id']);
         } on PostgrestException catch (e) {
-          print(e);
+          print(e.message);
         } catch (e) {
           print(e);
         }

@@ -69,6 +69,9 @@ class _SearchPageState extends State<SearchPage> {
               final dokter = value.dokter;
               final dokterFilter = value.filterDokter;
 
+              if (value.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
               if (dokter.isEmpty) {
                 return Center(
                   child: Text('Data dokter tidak tersedia.',
@@ -83,9 +86,6 @@ class _SearchPageState extends State<SearchPage> {
                 );
               }
 
-              if (value.isLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
               if (dokterFilter.isEmpty && controllerSearch.text != '') {
                 return Center(
                   child: Text(

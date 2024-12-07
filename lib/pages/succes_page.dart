@@ -4,13 +4,16 @@ import 'package:provider/provider.dart';
 import 'package:quickcare_app/providers/tab_bar_provider.dart';
 import 'package:quickcare_app/widgets/button.dart';
 
+import '../widgets/bottom_navbar.dart';
+
 class SuccesPage extends StatelessWidget {
   const SuccesPage({super.key});
   static const routeName = '/succes';
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final TabBarProvider tabBarProvider = Provider.of<TabBarProvider>(context, listen: false);
+    final TabBarProvider tabBarProvider =
+        Provider.of<TabBarProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -44,6 +47,10 @@ class SuccesPage extends StatelessWidget {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.pop(context);
+                    Navigator.pushReplacementNamed(
+                      context,
+                      BottomNavbar.routeName,
+                    );
                     tabBarProvider.setTabIndex(0);
                   })
             ],

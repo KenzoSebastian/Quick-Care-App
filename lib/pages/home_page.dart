@@ -13,6 +13,7 @@ import 'package:quickcare_app/widgets/animate_fade.dart';
 import 'package:quickcare_app/widgets/animate_scale.dart';
 import 'package:quickcare_app/widgets/card_dokter.dart';
 import 'package:quickcare_app/widgets/weather_widget.dart';
+import '../utils/load_all_data.dart';
 import '../widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -210,175 +211,181 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              Provider.of<DokterProvider>(context, listen: false).setDokter();
+              // Provider.of<DokterProvider>(context, listen: false).setDokter();
+              // print(Provider.of<LoadDataUser>(context, listen: false).userId);
             },
           )
         ],
       ),
       drawer: const MyDrawer(),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: screenSize.width * .05),
-        child: ListView(
-          children: [
-            Consumer<LoadDataUser>(builder: (context, dataUser, child) {
-              final data = dataUser.data;
-              return Padding(
-                padding: EdgeInsets.only(top: availableHeight * .05),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AnimatedFade(
-                          delay: 100,
-                          child: Text(
-                            greeting,
-                            style: GoogleFonts.poppins(
-                                fontSize: screenSize.width * .04,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        AnimatedFade(
-                          delay: 150,
-                          child: Text(
-                            "${data['nama'] ?? 'Unknown'}",
-                            style: GoogleFonts.poppins(
-                                fontSize: screenSize.width * .06,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                    AnimatedFade(
-                        delay: 200,
-                        child: WeatherWidget(width: screenSize.width)),
-                  ],
-                ),
-              );
-            }),
-            SizedBox(height: availableHeight * .035),
-            AnimatedFade(
-              delay: 250,
-              child: Text(
-                'Pilih layanan',
-                style: GoogleFonts.poppins(
-                    fontSize: screenSize.width * .035,
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-            SizedBox(height: availableHeight * .025),
-            SizedBox(
-              height: availableHeight * .33,
-              width: double.infinity,
-              child: GridView.count(
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 1,
-                crossAxisCount: 4,
-                childAspectRatio: 3 / 4,
-                physics: const NeverScrollableScrollPhysics(),
-                children: _menuList(screenSize.width, availableHeight),
-              ),
-            ),
-            AnimatedFade(
-              delay: 1100,
-              child: Text(
-                'Promo Untukmu',
-                style: GoogleFonts.poppins(
-                    fontSize: screenSize.width * .035,
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-            SizedBox(height: availableHeight * .025),
-            AnimatedFade(
-              delay: 1200,
-              child: SizedBox(
-                height: availableHeight * .275,
-                child: ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context).copyWith(
-                    dragDevices: {
-                      PointerDeviceKind.touch,
-                      PointerDeviceKind.mouse,
-                    },
-                  ),
-                  child: InfiniteCarousel.builder(
-                    controller: _controller,
-                    itemCount: _bannerList(availableHeight * .275).length,
-                    itemExtent: screenSize.width * .8999,
-                    itemBuilder: (context, index, realIndex) {
-                      return _bannerList(availableHeight * .275)[index];
-                    },
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: availableHeight * .035),
-            AnimatedFade(
-              delay: 1300,
-              child: Text(
-                'Rekomendasi Dokter',
-                style: GoogleFonts.poppins(
-                    fontSize: screenSize.width * .035,
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-            SizedBox(height: availableHeight * .025),
-            Consumer<DokterProvider>(
-              builder: (context, value, child) {
-                var dataDokter = value.dokter;
-
-                if (dataDokter.isEmpty) {
-                  return Center(
-                    child: Text('Data dokter tidak tersedia.',
-                        style: GoogleFonts.poppins(color: Colors.red)),
-                  );
-                }
-
-                if (dataDokter[0]['error'] != null) {
-                  return Center(
-                    child: Text(dataDokter[0]['error'],
-                        style: GoogleFonts.poppins(color: Colors.red)),
-                  );
-                }
-                return value.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : Column(
+      body: RefreshIndicator(
+        onRefresh: () async => await LoadAllData.loadAllData(context),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: screenSize.width * .05),
+          child: ListView(
+            children: [
+              Consumer<LoadDataUser>(builder: (context, dataUser, child) {
+                final data = dataUser.data;
+                return Padding(
+                  padding: EdgeInsets.only(top: availableHeight * .05),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 5,
-                            itemBuilder: (BuildContext context, int index) {
-                              return DokterCard(
-                                dataDokter: dataDokter[index],
-                                routeName: HomePage.routeName,
-                                radius: screenSize.width * .09,
-                                onTap: () {
-                                  tabBarProvider.setTabIndex(0);
-                                  PersistentNavBarNavigator.pushNewScreen(
-                                    context,
-                                    screen: DetailDokterPage(
-                                        dataDokter: dataDokter[index],
-                                        routeFrom: HomePage.routeName),
-                                    withNavBar: false,
-                                    pageTransitionAnimation:
-                                        PageTransitionAnimation.fade,
-                                  );
-                                },
+                          AnimatedFade(
+                            delay: 100,
+                            child: Text(
+                              greeting,
+                              style: GoogleFonts.poppins(
+                                  fontSize: screenSize.width * .04,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          AnimatedFade(
+                            delay: 150,
+                            child: Text(
+                              "${data['nama'] ?? 'Unknown'}",
+                              style: GoogleFonts.poppins(
+                                  fontSize: screenSize.width * .06,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      AnimatedFade(
+                          delay: 200,
+                          child: WeatherWidget(width: screenSize.width)),
+                    ],
+                  ),
+                );
+              }),
+              SizedBox(height: availableHeight * .035),
+              AnimatedFade(
+                delay: 250,
+                child: Text(
+                  'Pilih layanan',
+                  style: GoogleFonts.poppins(
+                      fontSize: screenSize.width * .035,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              SizedBox(height: availableHeight * .025),
+              SizedBox(
+                height: availableHeight * .33,
+                width: double.infinity,
+                child: GridView.count(
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 1,
+                  crossAxisCount: 4,
+                  childAspectRatio: 3 / 4,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: _menuList(screenSize.width, availableHeight),
+                ),
+              ),
+              AnimatedFade(
+                delay: 1100,
+                child: Text(
+                  'Promo Untukmu',
+                  style: GoogleFonts.poppins(
+                      fontSize: screenSize.width * .035,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              SizedBox(height: availableHeight * .025),
+              AnimatedFade(
+                delay: 1200,
+                child: SizedBox(
+                  height: availableHeight * .275,
+                  child: ScrollConfiguration(
+                    behavior: ScrollConfiguration.of(context).copyWith(
+                      dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse,
+                      },
+                    ),
+                    child: InfiniteCarousel.builder(
+                      controller: _controller,
+                      itemCount: _bannerList(availableHeight * .275).length,
+                      itemExtent: screenSize.width * .8999,
+                      itemBuilder: (context, index, realIndex) {
+                        return _bannerList(availableHeight * .275)[index];
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: availableHeight * .035),
+              AnimatedFade(
+                delay: 1300,
+                child: Text(
+                  'Rekomendasi Dokter',
+                  style: GoogleFonts.poppins(
+                      fontSize: screenSize.width * .035,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              SizedBox(height: availableHeight * .025),
+              Consumer<DokterProvider>(
+                builder: (context, value, child) {
+                  var dataDokter = value.dokter;
+        
+                  if (value.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+        
+                  if (dataDokter.isEmpty) {
+                    return Center(
+                      child: Text('Data dokter tidak tersedia.',
+                          style: GoogleFonts.poppins(color: Colors.red)),
+                    );
+                  }
+        
+                  if (dataDokter[0]['error'] != null) {
+                    return Center(
+                      child: Text(dataDokter[0]['error'],
+                          style: GoogleFonts.poppins(color: Colors.red)),
+                    );
+                  }
+                  return Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 5,
+                        itemBuilder: (BuildContext context, int index) {
+                          return DokterCard(
+                            dataDokter: dataDokter[index],
+                            routeName: HomePage.routeName,
+                            radius: screenSize.width * .09,
+                            onTap: () {
+                              tabBarProvider.setTabIndex(0);
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: DetailDokterPage(
+                                    dataDokter: dataDokter[index],
+                                    routeFrom: HomePage.routeName),
+                                withNavBar: false,
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.fade,
                               );
                             },
-                          ),
-                          SizedBox(height: availableHeight * .020),
-                          TextButton(
-                              onPressed: () {
-                                tabBarProvider.setTabIndex(1);
-                              },
-                              child: const Text('Lihat Semua Dokter')),
-                        ],
-                      );
-              },
-            ),
-          ],
+                          );
+                        },
+                      ),
+                      SizedBox(height: availableHeight * .020),
+                      TextButton(
+                          onPressed: () {
+                            tabBarProvider.setTabIndex(1);
+                          },
+                          child: const Text('Lihat Semua Dokter')),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -3,18 +3,14 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:quickcare_app/pages/detail_dokter_page.dart';
 import 'package:quickcare_app/pages/order_dokter_page.dart';
 import 'package:quickcare_app/pages/succes_page.dart';
-import 'package:quickcare_app/providers/dokter_provider.dart';
 import 'package:quickcare_app/providers/tab_bar_provider.dart';
-import 'package:weather/weather.dart';
+import 'package:quickcare_app/utils/load_all_data.dart';
 import '../pages/account_page.dart';
+import '../pages/edit_order_page.dart';
 import '../pages/history_page.dart';
 import '../pages/home_page.dart';
 import 'package:provider/provider.dart';
-import '../providers/dashboard_provider.dart';
 import '../pages/search_page.dart';
-import '../providers/riwayat_provider.dart';
-import '../providers/weather_provider.dart';
-import '../utils/location.dart';
 
 class BottomNavbar extends StatefulWidget {
   const BottomNavbar({super.key});
@@ -77,6 +73,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
         DetailDokterPage.routeName: (_) => const DetailDokterPage(),
         OrderDokter.routeName: (_) => const OrderDokter(),
         SuccesPage.routeName: (_) => const SuccesPage(),
+        EditOrder.routeName: (_) => const EditOrder(),
       });
 
   NavBarAnimationSettings _AnimationSetting() => const NavBarAnimationSettings(
@@ -99,29 +96,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
   void didChangeDependencies() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (isDataInit) return;
-      dynamic args = ModalRoute.of(context)!.settings.arguments;
-      if (args != null) {
-        args = args as Map<String, dynamic>;
-        Provider.of<LoadDataUser>(context, listen: false).setData(args);
-      }
-      await Provider.of<DokterProvider>(context, listen: false).setDokter();
-      Location location = const Location();
-      Weather? weather = await location.getWeather();
-      weather == null
-          ? null
-          : Provider.of<WeatherProvider>(context, listen: false)
-              .setDataWeather({
-              'areaName': weather.areaName,
-              'cloudiness': weather.cloudiness,
-              'country': weather.country,
-              'date': weather.date,
-              'humidity': weather.humidity,
-              'latitude': weather.latitude,
-              'longitude': weather.longitude,
-              'temperature': weather.temperature,
-              'weatherDescription': weather.weatherDescription,
-            });
-      await Provider.of<RiwayatProvider>(context, listen: false).setRiwayat();
+      await LoadAllData.loadAllData(context);
       isDataInit = true;
     });
 

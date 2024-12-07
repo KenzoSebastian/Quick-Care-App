@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:quickcare_app/pages/edit_order_page.dart';
 import 'package:quickcare_app/utils/formatter.dart';
 import '../providers/riwayat_provider.dart';
+import '../providers/tab_bar_provider.dart';
 import '../widgets/animate_fade.dart';
+import '../widgets/bottom_navbar.dart';
 import '../widgets/button.dart';
 import '../widgets/key_value_widget.dart';
+import '../widgets/overlay_message.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -32,7 +37,7 @@ class _HistoryPageState extends State<HistoryPage> {
             icon: const Icon(Icons.refresh),
             onPressed: () async {
               await Provider.of<RiwayatProvider>(context, listen: false)
-                  .setRiwayat();
+                  .setRiwayat(375);
             },
           ),
         ],
@@ -42,7 +47,7 @@ class _HistoryPageState extends State<HistoryPage> {
         child: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: availableHeight * .03),
+              padding: EdgeInsets.only(top: availableHeight * .03),
               child: AnimatedFade(
                 delay: 100,
                 child: Text(
@@ -58,10 +63,21 @@ class _HistoryPageState extends State<HistoryPage> {
               child: Consumer<RiwayatProvider>(
                 builder: (context, provider, child) {
                   final data = provider.riwayat;
+
+                  if (provider.isLoading) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: availableHeight * .03),
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
+                  }
+
                   if (data.isEmpty) {
-                    return Center(
-                      child: Text('Data riwayat kosong.',
-                          style: GoogleFonts.poppins(color: Colors.red)),
+                    return Padding(
+                      padding: EdgeInsets.only(top: availableHeight * .03),
+                      child: Center(
+                        child: Text('Data riwayat kosong.',
+                            style: GoogleFonts.poppins(color: Colors.red)),
+                      ),
                     );
                   }
 
@@ -72,9 +88,6 @@ class _HistoryPageState extends State<HistoryPage> {
                     );
                   }
 
-                  if (provider.isLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
                   String? previousDate;
                   return ListView.builder(
                     shrinkWrap: true,
@@ -90,21 +103,31 @@ class _HistoryPageState extends State<HistoryPage> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: availableHeight * .025),
                           if (!isSameDate)
-                            Text(
-                              formattedDate,
-                              style: GoogleFonts.poppins(
-                                  fontSize: screenSize.width * .04,
-                                  fontWeight: FontWeight.bold),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: availableHeight * .04,
+                                  bottom: availableHeight * .01,
+                                  left: screenSize.width * .02),
+                              child: Text(
+                                formattedDate,
+                                style: GoogleFonts.poppins(
+                                    fontSize: screenSize.width * .0475,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                           Card(
                               elevation: 5,
+                              margin: EdgeInsets.only(bottom: availableHeight * .02),
+                              color: data[index]['is_done']
+                                  ? Colors.green[100]
+                                  : Colors.red[100],
                               child: GestureDetector(
                                 onTap: () => _modalBottom(context,
                                     width: screenSize.width,
                                     height: availableHeight,
-                                    data: data[index]),
+                                    data: data[index],
+                                    riwayatProvider: provider),
                                 child: Container(
                                   padding: const EdgeInsets.all(16.0),
                                   width: double.infinity,
@@ -224,7 +247,8 @@ class _HistoryPageState extends State<HistoryPage> {
   Future<dynamic> _modalBottom(BuildContext context,
       {required double width,
       required double height,
-      required Map<String, dynamic> data}) {
+      required Map<String, dynamic> data,
+      required RiwayatProvider riwayatProvider}) {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -264,17 +288,95 @@ class _HistoryPageState extends State<HistoryPage> {
                     Expanded(
                       child: _detailDataRiwayat(width, height, data),
                     ),
-                    MyButton(
-                      onPressed: () {
-                        
-                      },
-                      text: 'Edit Pesanan',
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: width * .44,
+                          child: MyButton(
+                            onPressed: () {
+                              Provider.of<TabBarProvider>(context,
+                                      listen: false)
+                                  .setTabIndex(2);
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return _alertBatalPesan(
+                                        context, riwayatProvider, data);
+                                  });
+                            },
+                            text: 'Batal Pesan',
+                            color: Colors.redAccent,
+                          ),
+                        ),
+                        SizedBox(
+                          width: width * .44,
+                          child: MyButton(
+                            onPressed: () {
+                              Provider.of<TabBarProvider>(context,
+                                      listen: false)
+                                  .setTabIndex(2);
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: EditOrder(
+                                  dataDokter: data['Dokter'],
+                                  routeFrom: HistoryPage.routeName,
+                                  tanggal_konsultasi:
+                                      data['tanggal_konsultasi'],
+                                  waktu_konsultasi: data['waktu_konsultasi'],
+                                  id_riwayat: data['id'],
+                                ),
+                                withNavBar: false,
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.fade,
+                              );
+                            },
+                            text: 'Edit Pesanan',
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 )
               : _detailDataRiwayat(width, height, data),
         );
       },
+    );
+  }
+
+  AlertDialog _alertBatalPesan(BuildContext context,
+      RiwayatProvider riwayatProvider, Map<String, dynamic> data) {
+    return AlertDialog(
+      title: const Text('Batalkan Pesanan'),
+      content: const Text('Apakah anda yakin ingin membatalkan pesanan ini?'),
+      actions: [
+        TextButton(
+          child: const Text('Batal'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        TextButton(
+          child: const Text('Iya'),
+          onPressed: () async {
+            await riwayatProvider.deleteRiwayat(id: data['id']);
+            Navigator.pop(context);
+            Navigator.pushReplacementNamed(
+              context,
+              BottomNavbar.routeName,
+            );
+            if (riwayatProvider.statusDelete['message'] == 'Success') {
+              OverlayMessage().showOverlayMessage(
+                  context, 'Pesanan berhasil dibatalkan',
+                  color: Colors.green);
+              return;
+            }
+            OverlayMessage().showOverlayMessage(
+                context, 'Pesanan gagal dibatalkan, silahkan coba lagi',
+                color: Colors.red);
+          },
+        ),
+      ],
     );
   }
 

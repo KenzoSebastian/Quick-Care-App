@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class OverlayMessage {
   bool _isVisible = false;
 
-  void showOverlayMessage(BuildContext context, String message) {
+  void showOverlayMessage(BuildContext context, String message, {Color color = Colors.red}) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) {
@@ -22,8 +22,15 @@ class OverlayMessage {
                 padding: const EdgeInsets.symmetric(
                     vertical: 10.0, horizontal: 20.0),
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: color,
                   borderRadius: BorderRadius.circular(8.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      offset: const Offset(0, 2),
+                      blurRadius: 4.0,
+                    ),
+                  ],
                 ),
                 child: Text(
                   message,

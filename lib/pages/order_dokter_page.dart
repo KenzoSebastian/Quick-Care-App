@@ -11,6 +11,7 @@ import 'package:quickcare_app/widgets/overlay_message.dart';
 import '../providers/dashboard_provider.dart';
 import '../utils/formatter.dart';
 import '../widgets/animate_fade.dart';
+import '../widgets/item_select.dart';
 import '../widgets/key_value_widget.dart';
 import 'succes_page.dart';
 
@@ -38,7 +39,10 @@ class _OrderDokterState extends State<OrderDokter> {
     );
     if (pickedDate != null) {
       String formattedDate = DateFormat('dd-MMM-yyyy').format(pickedDate);
-      setState(() => dateOrder = formattedDate);
+      setState(() {
+        dateOrder = formattedDate;
+        selectedTime = null;
+      });
     }
   }
 
@@ -105,7 +109,7 @@ class _OrderDokterState extends State<OrderDokter> {
                                       AnimatedScaleCustom(
                                         delay: 100,
                                         duration: 300,
-                                        child: _cardItems(
+                                        child: ItemSelect(
                                           child: Text(
                                             dateOrder ==
                                                     DateFormat('dd-MMM-yyyy')
@@ -124,12 +128,11 @@ class _OrderDokterState extends State<OrderDokter> {
                                         onTap: () {
                                           _selectDate(context);
                                         },
-                                        child: AnimatedScaleCustom(
+                                        child: const AnimatedScaleCustom(
                                           delay: 200,
                                           duration: 300,
-                                          child: _cardItems(
-                                            child: const Icon(
-                                                Icons.calendar_today),
+                                          child: ItemSelect(
+                                            child: Icon(Icons.calendar_today),
                                           ),
                                         ),
                                       ),
@@ -323,7 +326,6 @@ class _OrderDokterState extends State<OrderDokter> {
                               });
                               if (riwayatProvider.responsePayment["error"] ==
                                   null) {
-                                await riwayatProvider.setRiwayat();
                                 PersistentNavBarNavigator.pushNewScreen(
                                   context,
                                   screen: const SuccesPage(),
@@ -503,12 +505,13 @@ class _OrderDokterState extends State<OrderDokter> {
           });
         }
       },
-      child: _cardItems(
+      child: ItemSelect(
         color: isDisabled
             ? Colors.grey.withOpacity(0.5)
             : (selectedTime == time
                 ? const Color(0xFFFF5722)
                 : const Color(0xFFBBDEFB)),
+        isDisabled: isDisabled,
         child: Text(
           time,
           style: GoogleFonts.poppins(
@@ -517,26 +520,6 @@ class _OrderDokterState extends State<OrderDokter> {
             color: selectedTime == time ? Colors.white : Colors.black,
           ),
         ),
-        isDisabled: isDisabled,
-      ),
-    );
-  }
-
-  Card _cardItems({
-    required Widget child,
-    Color color = const Color.fromARGB(255, 209, 221, 239),
-    bool isDisabled = false,
-  }) {
-    return Card(
-      elevation: isDisabled ? 0 : 5,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: child,
       ),
     );
   }

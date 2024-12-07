@@ -42,24 +42,21 @@ class RiwayatProvider with ChangeNotifier {
   bool _isLoading = true;
   bool get isLoading => _isLoading;
 
-  Future<void> setRiwayat() async {
+  Future<void> setRiwayat(int id) async {
     _isLoading = true;
     notifyListeners();
     try {
       var response = await supabase
           .from('Riwayat')
-          .select(
-              'id, created_at, tanggal_konsultasi, waktu_konsultasi, biaya_penanganan, total_biaya, metode_pembayaran, is_done, Dokter(nama, spesialis, harga)')
-          .eq('id_users', 37)
-          .order('id', ascending: false);
-
+          .select('id, tanggal_konsultasi, waktu_konsultasi, is_done')
+          .eq('id_users', id);
       await UpdateRiwayat().updateRiwayat(response);
 
       var updatedResponse = await supabase
           .from('Riwayat')
           .select(
-              'id, created_at, tanggal_konsultasi, waktu_konsultasi, biaya_penanganan, total_biaya, metode_pembayaran, is_done, Dokter(nama, spesialis, harga)')
-          .eq('id_users', 37)
+              'id, created_at, tanggal_konsultasi, waktu_konsultasi, biaya_penanganan, total_biaya, metode_pembayaran, is_done, Dokter(nama, spesialis, harga, url_foto)')
+          .eq('id_users', id)
           .order('id', ascending: false);
 
       _riwayat.clear();
@@ -76,6 +73,55 @@ class RiwayatProvider with ChangeNotifier {
       ]);
     }
     _isLoading = false;
+    notifyListeners();
+  }
+
+  final Map<String, dynamic> _statusEdit = {};
+  Map<String, dynamic> get statusEdit => _statusEdit;
+
+  Future<void> editRiwayat(
+      {required DateTime tanggal_konsultasi,
+      required String waktu_konsultasi,
+      required int id}) async {
+    try {
+      var result = await supabase.from('Riwayat').update({
+        'tanggal_konsultasi': tanggal_konsultasi.toString(),
+        'waktu_konsultasi': waktu_konsultasi
+      }).eq('id', id);
+      if (result == null) {
+        _statusEdit.clear();
+        _statusEdit.addAll({'status': 200});
+      }
+    } on PostgrestException catch (e) {
+      _statusEdit.clear();
+      _statusEdit.addAll({'status': int.parse(e.code!)});
+    } catch (e) {
+      _statusEdit.clear();
+      _statusEdit.addAll({'status': 404});
+    }
+    _isLoading = true;
+    notifyListeners();
+  }
+
+  final Map<String, dynamic> _statusDelete = {};
+  Map<String, dynamic> get statusDelete => _statusDelete;
+
+  Future<void> deleteRiwayat({required int id}) async {
+    try {
+      var result = await supabase.from('Riwayat').delete().eq('id', id);
+      print(result);
+      if (result == null) {
+        _statusDelete.clear();
+        _statusDelete.addAll({'message': 'Success'});
+      }
+    } on PostgrestException catch (e) {
+      _statusDelete.clear();
+      _statusDelete.addAll({'message': e.message});
+    } catch (e) {
+      _statusDelete.clear();
+      _statusDelete.addAll({'message': e});
+    }
+    _isLoading = true;
     notifyListeners();
   }
 }

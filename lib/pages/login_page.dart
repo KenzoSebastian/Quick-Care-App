@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:quickcare_app/providers/dashboard_provider.dart';
 import 'package:quickcare_app/widgets/bottom_navbar.dart';
 import 'package:quickcare_app/widgets/button.dart';
 import 'package:quickcare_app/widgets/overlay_message.dart';
@@ -194,9 +195,11 @@ class _LoginPageState extends State<LoginPage> {
                           email: emailController.text,
                           password: passwordController.text);
                       if (loginProvider.user['error'] == null) {
+                        LoadDataUser loadDataUser =
+                            Provider.of<LoadDataUser>(context, listen: false);
+                        loadDataUser.setUserId(loginProvider.user['id']);
                         Navigator.pushReplacementNamed(
-                            context, BottomNavbar.routeName,
-                            arguments: loginProvider.user);
+                            context, BottomNavbar.routeName);
                       } else {
                         OverlayMessage().showOverlayMessage(
                             context, loginProvider.user['error']);

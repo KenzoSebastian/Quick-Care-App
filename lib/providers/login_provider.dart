@@ -14,7 +14,7 @@ class LoginProvider with ChangeNotifier {
           await supabase.from('Users').select('*').eq('email', email);
       await Validate.authenticationLogin(result: response, password: password);
       _user.clear();
-      _user.addAll(response[0]);
+      _user.addAll({'id': response[0]['id']});
     } on PostgrestException catch (e) {
       _user.clear();
       _user.addAll({'error': e.message});
