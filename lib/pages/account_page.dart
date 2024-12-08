@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:provider/provider.dart';
 import 'package:quickcare_app/widgets/bottom_navbar.dart';
+
+import '../providers/dashboard_provider.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -12,54 +16,61 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple,
         title: const Text('Profile'),
+        backgroundColor: Colors.purple,
       ),
       // drawer: const MyDrawer(),
-      body: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            color: Colors.white,
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                Stack(alignment: Alignment.center, children: [
-                  Container(
-                      width: double.infinity, height: 4, color: Colors.black),
-                  const CircleAvatar(
-                    radius: 40,
-                    // backgroundImage: NetworkImage(
-                    //     'https://via.placeholder.com/150'), // Ganti URL gambar dengan foto profil Anda
-                  ),
-                ]),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+      body: LiquidPullToRefresh(
+        backgroundColor: Colors.purple,
+        showChildOpacityTransition: false,
+        animSpeedFactor: 3,
+        color: Colors.grey[200],
+        onRefresh: () async => Provider.of<LoadDataUser>(context, listen: false).setData(),
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              color: Colors.white,
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  Stack(alignment: Alignment.center, children: [
+                    Container(
+                        width: double.infinity, height: 4, color: Colors.black),
+                    const CircleAvatar(
+                      radius: 40,
+                      // backgroundImage: NetworkImage(
+                      //     'https://via.placeholder.com/150'), // Ganti URL gambar dengan foto profil Anda
                     ),
+                  ]),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: const Text('Edit Profile'),
                   ),
-                  child: const Text('Edit Profile'),
-                ),
-                const SizedBox(height: 20),
-              ],
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: ListView(
-              children: [
-                buildSectionHeader('Mini Headline'),
-                buildListTile('History', Icons.history),
-                buildListTile('Data Diri', Icons.person_sharp),
-                buildListTile('No Telepon', Icons.call),
-                const Divider(),
-              ],
+            Expanded(
+              child: ListView(
+                children: [
+                  buildSectionHeader('Mini Headline'),
+                  buildListTile('History', Icons.history),
+                  buildListTile('Data Diri', Icons.person_sharp),
+                  buildListTile('No Telepon', Icons.call),
+                  const Divider(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.logout),

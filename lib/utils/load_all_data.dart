@@ -26,10 +26,8 @@ class LoadAllData {
             'weatherDescription': weather.weatherDescription,
           });
     await Provider.of<DokterProvider>(context, listen: false).setDokter();
-    
-    if (userId != null) {
-      await Provider.of<RiwayatProvider>(context, listen: false)
-          .setRiwayat(userId);
-    }
+
+    await Provider.of<RiwayatProvider>(context, listen: false)
+        .setRiwayat(userId);
   }
 }

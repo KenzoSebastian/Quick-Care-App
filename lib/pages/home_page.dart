@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:quickcare_app/pages/detail_dokter_page.dart';
@@ -218,7 +219,11 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: const MyDrawer(),
-      body: RefreshIndicator(
+      body: LiquidPullToRefresh(
+        showChildOpacityTransition: false,
+        backgroundColor: Colors.lightBlue,
+        animSpeedFactor: 3, 
+        color: Colors.grey[200],
         onRefresh: () async => await LoadAllData.loadAllData(context),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: screenSize.width * .05),
@@ -330,18 +335,18 @@ class _HomePageState extends State<HomePage> {
               Consumer<DokterProvider>(
                 builder: (context, value, child) {
                   var dataDokter = value.dokter;
-        
+
                   if (value.isLoading) {
                     return const Center(child: CircularProgressIndicator());
                   }
-        
+
                   if (dataDokter.isEmpty) {
                     return Center(
                       child: Text('Data dokter tidak tersedia.',
                           style: GoogleFonts.poppins(color: Colors.red)),
                     );
                   }
-        
+
                   if (dataDokter[0]['error'] != null) {
                     return Center(
                       child: Text(dataDokter[0]['error'],

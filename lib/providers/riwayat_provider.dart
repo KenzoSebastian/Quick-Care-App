@@ -42,35 +42,37 @@ class RiwayatProvider with ChangeNotifier {
   bool _isLoading = true;
   bool get isLoading => _isLoading;
 
-  Future<void> setRiwayat(int id) async {
+  Future<void> setRiwayat(int? id) async {
     _isLoading = true;
     notifyListeners();
-    try {
-      var response = await supabase
-          .from('Riwayat')
-          .select('id, tanggal_konsultasi, waktu_konsultasi, is_done')
-          .eq('id_users', id);
-      await UpdateRiwayat().updateRiwayat(response);
+    if (id != null) {
+      try {
+        var response = await supabase
+            .from('Riwayat')
+            .select('id, tanggal_konsultasi, waktu_konsultasi, is_done')
+            .eq('id_users', id);
+        await UpdateRiwayat().updateRiwayat(response);
 
-      var updatedResponse = await supabase
-          .from('Riwayat')
-          .select(
-              'id, created_at, tanggal_konsultasi, waktu_konsultasi, biaya_penanganan, total_biaya, metode_pembayaran, is_done, Dokter(nama, spesialis, harga, url_foto)')
-          .eq('id_users', id)
-          .order('id', ascending: false);
+        var updatedResponse = await supabase
+            .from('Riwayat')
+            .select(
+                'id, created_at, tanggal_konsultasi, waktu_konsultasi, biaya_penanganan, total_biaya, metode_pembayaran, is_done, Dokter(nama, spesialis, harga, url_foto)')
+            .eq('id_users', id)
+            .order('id', ascending: false);
 
-      _riwayat.clear();
-      _riwayat.addAll(updatedResponse);
-    } on PostgrestException catch (e) {
-      _riwayat.clear();
-      _riwayat.addAll([
-        {'error': e.message}
-      ]);
-    } catch (e) {
-      _riwayat.clear();
-      _riwayat.addAll([
-        {'error': e}
-      ]);
+        _riwayat.clear();
+        _riwayat.addAll(updatedResponse);
+      } on PostgrestException catch (e) {
+        _riwayat.clear();
+        _riwayat.addAll([
+          {'error': e.message}
+        ]);
+      } catch (e) {
+        _riwayat.clear();
+        _riwayat.addAll([
+          {'error': e}
+        ]);
+      }
     }
     _isLoading = false;
     notifyListeners();
