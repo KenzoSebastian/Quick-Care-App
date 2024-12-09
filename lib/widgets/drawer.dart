@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:quickcare_app/providers/tab_bar_provider.dart';
+import 'package:quickcare_app/widgets/about_dialog.dart';
 import '../providers/dashboard_provider.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -26,17 +27,18 @@ class MyDrawer extends StatelessWidget {
                 },
                 child: Container(
                     padding: const EdgeInsets.all(16.0),
-                    color: const Color.fromRGBO(1, 163, 199, 1),
+                    color: const Color.fromARGB(255, 1, 163, 199),
                     width: double.infinity,
                     height: heightFull * .25,
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const CircleAvatar(
+                          CircleAvatar(
                             radius: 45,
-                            backgroundImage:
-                                NetworkImage('https://i.pravatar.cc/300'),
+                            backgroundColor: Colors.white,
+                            backgroundImage: AssetImage(
+                                'assets/profiles/${data['photo_profile'] ?? ''}'),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
@@ -82,7 +84,7 @@ class MyDrawer extends StatelessWidget {
                   title: const Text('About'),
                   onTap: () {
                     Navigator.pop(context);
-                    _aboutDialog(context);
+                    AboutDialogCustom.aboutDialog(context);
                     tabBarProvider.setTabIndex(0);
                   },
                 ),
@@ -100,35 +102,6 @@ class MyDrawer extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  void _aboutDialog(BuildContext context) {
-    return showAboutDialog(
-      context: context,
-      applicationName: 'Quick Care',
-      applicationVersion: '1.0.0',
-      applicationIcon: Image.asset(
-        'assets/images/icon.png',
-        width: 50,
-        height: 50,
-      ),
-      children: [
-        const Text(
-            'Quick Care adalah aplikasi booking dokter online yang memudahkan Anda untuk membuat janji temu dengan dokter spesialis.'),
-        const SizedBox(height: 10),
-        const Text('Dengan Quick Care, Anda dapat:'),
-        const Text('- Mendaftar dan masuk dengan mudah.'),
-        const Text('- Memilih dokter spesialis sesuai kebutuhan.'),
-        const Text('- Menentukan tanggal dan waktu konsultasi.'),
-        const Text('- Melakukan pembayaran secara aman.'),
-        const Text('- Melihat riwayat janji temu Anda.'),
-        const SizedBox(height: 10),
-        const Text(
-            'Aplikasi ini dikembangkan oleh tim profesional yang berkomitmen untuk memberikan kemudahan akses layanan kesehatan bagi masyarakat.'),
-        const SizedBox(height: 10),
-        const Text('Terima kasih telah menggunakan Quick Care!'),
-      ],
     );
   }
 }

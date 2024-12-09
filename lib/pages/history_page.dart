@@ -49,6 +49,7 @@ class _HistoryPageState extends State<HistoryPage> {
         showChildOpacityTransition: false,
         backgroundColor: Colors.orange,
         animSpeedFactor: 3,
+        springAnimationDurationInMilliseconds: 750,
         color: Colors.grey[200],
         onRefresh: () async =>
             await Provider.of<RiwayatProvider>(context, listen: false)

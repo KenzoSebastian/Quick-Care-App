@@ -222,50 +222,52 @@ class _HomePageState extends State<HomePage> {
       body: LiquidPullToRefresh(
         showChildOpacityTransition: false,
         backgroundColor: Colors.lightBlue,
-        animSpeedFactor: 3, 
+        animSpeedFactor: 3,
+        springAnimationDurationInMilliseconds: 750,
         color: Colors.grey[200],
         onRefresh: () async => await LoadAllData.loadAllData(context),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: screenSize.width * .05),
           child: ListView(
             children: [
-              Consumer<LoadDataUser>(builder: (context, dataUser, child) {
-                final data = dataUser.data;
-                return Padding(
-                  padding: EdgeInsets.only(top: availableHeight * .05),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AnimatedFade(
-                            delay: 100,
-                            child: Text(
-                              greeting,
-                              style: GoogleFonts.poppins(
-                                  fontSize: screenSize.width * .04,
-                                  fontWeight: FontWeight.w500),
-                            ),
+              Padding(
+                padding: EdgeInsets.only(top: availableHeight * .05),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AnimatedFade(
+                          delay: 100,
+                          child: Text(
+                            greeting,
+                            style: GoogleFonts.poppins(
+                                fontSize: screenSize.width * .04,
+                                fontWeight: FontWeight.w500),
                           ),
-                          AnimatedFade(
-                            delay: 150,
-                            child: Text(
+                        ),
+                        AnimatedFade(
+                          delay: 150,
+                          child: Consumer<LoadDataUser>(
+                              builder: (context, provider, child) {
+                            var data = provider.data;
+                            return Text(
                               "${data['nama'] ?? 'Unknown'}",
                               style: GoogleFonts.poppins(
                                   fontSize: screenSize.width * .06,
                                   fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                      AnimatedFade(
-                          delay: 200,
-                          child: WeatherWidget(width: screenSize.width)),
-                    ],
-                  ),
-                );
-              }),
+                            );
+                          }),
+                        ),
+                      ],
+                    ),
+                    AnimatedFade(
+                        delay: 200,
+                        child: WeatherWidget(width: screenSize.width)),
+                  ],
+                ),
+              ),
               SizedBox(height: availableHeight * .035),
               AnimatedFade(
                 delay: 250,

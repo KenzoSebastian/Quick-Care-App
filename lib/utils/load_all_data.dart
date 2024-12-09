@@ -29,5 +29,20 @@ class LoadAllData {
 
     await Provider.of<RiwayatProvider>(context, listen: false)
         .setRiwayat(userId);
+
+    await Provider.of<RiwayatProvider>(context, listen: false)
+        .setRiwayatProgress(userId);
+  }
+
+  static Future<void> loadProfilePage(BuildContext context) async {
+    int? userId = Provider.of<LoadDataUser>(context, listen: false).userId;
+
+    Provider.of<LoadDataUser>(context, listen: false).setData();
+
+    await Provider.of<RiwayatProvider>(context, listen: false)
+        .setRiwayat(userId);
+
+    await Provider.of<RiwayatProvider>(context, listen: false)
+        .setRiwayatProgress(userId);
   }
 }

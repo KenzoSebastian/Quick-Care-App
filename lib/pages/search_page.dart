@@ -44,6 +44,7 @@ class _SearchPageState extends State<SearchPage> {
         showChildOpacityTransition: false,
         backgroundColor: Colors.green,
         animSpeedFactor: 3,
+        springAnimationDurationInMilliseconds: 750,
         color: Colors.grey[200],
         onRefresh: () async => await Provider.of<DokterProvider>(context, listen: false).setDokter(),
         child: Padding(

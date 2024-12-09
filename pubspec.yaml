@@ -49,6 +49,7 @@ dependencies:
   weather: ^3.1.1
   geolocator: ^13.0.2
   liquid_pull_to_refresh: ^3.0.1
+  flutter_svg: ^2.0.16
 
 dev_dependencies:
   flutter_test:
@@ -103,6 +104,18 @@ flutter:
     - assets\payments\dana.png
     - assets\payments\ovo.png
     - assets\payments\success.png
+    - assets\profiles\default.png
+    - assets\profiles\pp1.png
+    - assets\profiles\pp2.png
+    - assets\profiles\pp3.png
+    - assets\profiles\pp4.png
+    - assets\profiles\pp5.png
+    - assets\profiles\pp6.png
+    - assets\profiles\pp7.png
+    - assets\profiles\pp8.png
+    - assets\profiles\pp9.png
+    - assets\profiles\pp10.png
+    - assets\profiles\wave.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

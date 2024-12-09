@@ -3,7 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoadDataUser with ChangeNotifier {
   final supabase = Supabase.instance.client;
-  int? _userId;
+  int? _userId = 37;
   int? get userId => _userId;
 
   void setUserId(int id) {

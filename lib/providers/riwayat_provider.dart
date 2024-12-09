@@ -78,6 +78,41 @@ class RiwayatProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  final List<Map<String, dynamic>> _riwayatProgress = [];
+  List<Map<String, dynamic>> get riwayatProgress => _riwayatProgress;
+
+  Future<void> setRiwayatProgress(int? id) async {
+    _isLoading = true;
+    notifyListeners();
+    if (id != null) {
+      try {
+        var response = await supabase
+            .from('Riwayat')
+            .select(
+                'id, created_at, tanggal_konsultasi, waktu_konsultasi, biaya_penanganan, total_biaya, metode_pembayaran, is_done, Dokter(nama, spesialis, harga, url_foto)')
+            .eq('id_users', id)
+            .eq('is_done', false)
+            .order('id', ascending: false);
+
+        _riwayatProgress.clear();
+        _riwayatProgress.addAll(response);
+        print(riwayatProgress.length);
+      } on PostgrestException catch (e) {
+        _riwayatProgress.clear();
+        _riwayatProgress.addAll([
+          {'error': e.message}
+        ]);
+      } catch (e) {
+        _riwayatProgress.clear();
+        _riwayatProgress.addAll([
+          {'error': e}
+        ]);
+      }
+    }
+    _isLoading = false;
+    notifyListeners();
+  }
+
   final Map<String, dynamic> _statusEdit = {};
   Map<String, dynamic> get statusEdit => _statusEdit;
 
