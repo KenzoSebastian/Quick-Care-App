@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:quickcare_app/pages/detail_dokter_page.dart';
+import 'package:quickcare_app/pages/edit_profile_page.dart';
 import 'package:quickcare_app/pages/order_dokter_page.dart';
 import 'package:quickcare_app/pages/succes_page.dart';
 import 'package:quickcare_app/providers/tab_bar_provider.dart';
@@ -74,6 +75,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
         OrderDokter.routeName: (_) => const OrderDokter(),
         SuccesPage.routeName: (_) => const SuccesPage(),
         EditOrder.routeName: (_) => const EditOrder(),
+        EditProfile.routeName: (_) => const EditProfile(),
       });
 
   NavBarAnimationSettings _AnimationSetting() => const NavBarAnimationSettings(

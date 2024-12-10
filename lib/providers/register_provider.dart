@@ -17,7 +17,7 @@ class RegisterProvider with ChangeNotifier {
       required String email,
       required String password}) async {
     try {
-      await Validate.validationregister(
+      await Validate.validationRegister(
         nama: nama,
         nik: nik,
         noHandphone: noHandphone,

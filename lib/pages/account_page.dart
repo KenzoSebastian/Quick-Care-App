@@ -3,7 +3,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:quickcare_app/pages/edit_profile_page.dart';
 import 'package:quickcare_app/providers/riwayat_provider.dart';
 import 'package:quickcare_app/utils/load_all_data.dart';
 import 'package:quickcare_app/widgets/button.dart';
@@ -183,7 +185,14 @@ class _AccountPageState extends State<AccountPage> {
                     data: 'Edit Profile',
                     color: Colors.black,
                     width: screenSize.width,
-                    onTap: () {},
+                    onTap: () {
+                      PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const EditProfile(),
+                        withNavBar: false,
+                        pageTransitionAnimation: PageTransitionAnimation.fade,
+                      );
+                    },
                     trailing: const Icon(
                       Icons.keyboard_arrow_right,
                       color: Colors.black,
@@ -342,8 +351,8 @@ class _AccountPageState extends State<AccountPage> {
                             'Gagal mengubah foto profil, silakan coba lagi');
                         return;
                       }
-                      Navigator.pop(context);
                       await LoadAllData.loadProfilePage(context);
+                      Navigator.pop(context);
                     },
                   );
                 })
@@ -393,7 +402,7 @@ class _AccountPageState extends State<AccountPage> {
       leading: icon,
       title: Text(
         data,
-        style: GoogleFonts.poppins(fontSize: width * .04, color: color),
+        style: GoogleFonts.poppins(fontSize: width * .04, color: color, fontWeight: FontWeight.bold),
       ),
       trailing: trailing,
     );

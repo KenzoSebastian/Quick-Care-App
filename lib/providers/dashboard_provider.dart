@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../utils/validate.dart';
+
 class LoadDataUser with ChangeNotifier {
   final supabase = Supabase.instance.client;
   int? _userId = 37;
@@ -54,5 +56,40 @@ class LoadDataUser with ChangeNotifier {
       }
       notifyListeners();
     }
+  }
+
+  final Map<String, dynamic> _statusEditUser = {};
+  Map<String, dynamic> get statusEditUser => _statusEditUser;
+
+  Future editUser(
+      {required String nama,
+      required String nik,
+      required String noHandphone,
+      required String tglLahir}) async {
+    try {
+      await Validate.validationEditUser(
+          nama: nama, nik: nik, noHandphone: noHandphone, tglLahir: tglLahir);
+      var result = await supabase.from('Users').update({
+        'nama': nama,
+        'nik': nik,
+        'no_handphone': noHandphone,
+        'tanggal_lahir': tglLahir
+      }).eq('id', _userId!);
+      if (result == null) {
+        _statusEditUser.clear();
+        _statusEditUser.addAll({'status': 200});
+      }
+    } on PostgrestException catch (e) {
+      print(e);
+      _statusEditUser.clear();
+      _statusEditUser.addAll({
+        'status': int.parse(e.code!),
+        'error': 'Terjadi kesalahan tak terduga pada server'
+      });
+    } catch (e) {
+      _statusEditUser.clear();
+      _statusEditUser.addAll({'status': 404, 'error': e});
+    }
+    notifyListeners();
   }
 }

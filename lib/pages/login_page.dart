@@ -58,10 +58,21 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       AnimatedFade(
                         delay: 200,
-                        child: Image.asset('assets/images/login.jpg',
+                        child: Image.asset('assets/images/login.png',
                             height: screenSize.height * 0.3),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: screenSize.height * .025),
+                      AnimatedFade(
+                        delay: 400,
+                        child: Text(
+                          "LOGIN",
+                          style: GoogleFonts.poppins(
+                              fontSize: screenSize.width * 0.07,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(height: screenSize.height * .025),
                       AnimatedFade(
                         delay: 400,
                         child: Text(
@@ -71,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: screenSize.height * .04),
                       AnimatedFade(
                         delay: 600,
                         child: Column(
@@ -108,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: screenSize.height * .025),
                       AnimatedFade(
                         delay: 800,
                         child: Consumer<InputProvider>(
@@ -155,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: screenSize.height * .025),
                       AnimatedFade(
                         delay: 1000,
                         child: Row(
@@ -189,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Consumer<LoginProvider>(
                   builder: (context, loginProvider, child) => MyButton(
                     text: "Login",
-                    margin: const EdgeInsets.only(bottom: 20),
+                    margin: EdgeInsets.only(bottom: screenSize.height * .03),
                     onPressed: () async {
                       await loginProvider.loginUser(
                           email: emailController.text,

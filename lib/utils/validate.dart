@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:string_validator/string_validator.dart';
 
 class Validate {
-  static Future? validationregister(
+  static Future? validationRegister(
       {required String nama,
       required String nik,
       required String noHandphone,
@@ -22,6 +22,22 @@ class Validate {
     await noHandphoneValidation(noHandphone: noHandphone);
     await emailValidation(email: email);
     await passwordValidation(password: password);
+    return null;
+  }
+
+  static Future? validationEditUser(
+      {required String nama,
+      required String nik,
+      required String noHandphone,
+      required String tglLahir}) async {
+    // validation empty field
+    if (nama.isEmpty ||
+        nik.isEmpty ||
+        noHandphone.isEmpty ||
+        tglLahir.isEmpty) return Future.error('Semua field harus diisi');
+    await namaValidation(nama: nama);
+    await nikValidation(nik: nik);
+    await noHandphoneValidation(noHandphone: noHandphone);
     return null;
   }
 

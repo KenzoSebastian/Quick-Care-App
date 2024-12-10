@@ -77,6 +77,17 @@ class _RegisterPageState extends State<RegisterPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       AnimatedFade(
+                        delay: 50,
+                        child: Text(
+                          "REGISTER",
+                          style: GoogleFonts.poppins(
+                              fontSize: screenSize.width * 0.07,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(height: screenSize.height * .02),
+                      AnimatedFade(
                         delay: 200,
                         child: Text(
                           "Silakan masukkan informasi Anda untuk mendaftar.",

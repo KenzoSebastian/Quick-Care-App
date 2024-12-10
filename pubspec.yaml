@@ -88,12 +88,13 @@ flutter:
     - assets\images\intro3.png
     - assets\images\intro4.png
     - assets\images\intro5.png
-    - assets\images\login.jpg
+    - assets\images\login.png
     - assets\images\icon.png
     - assets\images\icon_foreground.png
     - assets\images\splash.png
     - assets\images\splashBackground.png
     - assets\images\dokter.png
+    - assets\images\edit.png
     - assets\banners\banner1.png
     - assets\banners\banner2.png
     - assets\banners\banner3.png
