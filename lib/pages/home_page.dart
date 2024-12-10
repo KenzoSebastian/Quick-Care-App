@@ -14,7 +14,9 @@ import 'package:quickcare_app/widgets/animate_fade.dart';
 import 'package:quickcare_app/widgets/animate_scale.dart';
 import 'package:quickcare_app/widgets/card_dokter.dart';
 import 'package:quickcare_app/widgets/weather_widget.dart';
+import '../providers/riwayat_provider.dart';
 import '../utils/load_all_data.dart';
+import '../widgets/card_riwayat.dart';
 import '../widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -211,10 +213,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: () {
-              // Provider.of<DokterProvider>(context, listen: false).setDokter();
-              // print(Provider.of<LoadDataUser>(context, listen: false).userId);
-            },
+            onPressed: () {},
           )
         ],
       ),
@@ -325,7 +324,7 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: availableHeight * .035),
               AnimatedFade(
-                delay: 1300,
+                delay: 500,
                 child: Text(
                   'Rekomendasi Dokter',
                   style: GoogleFonts.poppins(
@@ -391,6 +390,70 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
+              SizedBox(height: availableHeight * .035),
+              AnimatedFade(
+                delay: 500,
+                child: Text(
+                  'Pesanan Terakhir Anda',
+                  style: GoogleFonts.poppins(
+                      fontSize: screenSize.width * .035,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              SizedBox(height: availableHeight * .025),
+              Consumer<RiwayatProvider>(
+                builder: (context, provider, child) {
+                  final data = provider.riwayat;
+
+                  if (provider.isLoading) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: availableHeight * .03),
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
+                  }
+
+                  if (data.isEmpty) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: availableHeight * .03),
+                      child: Center(
+                        child: Text('Data riwayat kosong.',
+                            style: GoogleFonts.poppins(color: Colors.red)),
+                      ),
+                    );
+                  }
+
+                  if (data[0]['error'] != null) {
+                    return Center(
+                      child: Text(data[0]['error'],
+                          style: GoogleFonts.poppins(color: Colors.red)),
+                    );
+                  }
+                  return Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: data.length < 3 ? data.length : 3,
+                        itemBuilder: (BuildContext context, int index) {
+                          return CardRiwayat(
+                            data: data[index],
+                            height: availableHeight,
+                            width: screenSize.width,
+                            provider: provider,
+                            routeFrom: HomePage.routeName,
+                          );
+                        },
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            tabBarProvider.setTabIndex(2);
+                          },
+                          child: const Text('Lihat Semua Pesanan')),
+                    ],
+                  );
+                },
+              ),
+              SizedBox(height: availableHeight * .035),
             ],
           ),
         ),

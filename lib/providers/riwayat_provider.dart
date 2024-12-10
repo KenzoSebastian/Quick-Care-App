@@ -96,7 +96,6 @@ class RiwayatProvider with ChangeNotifier {
 
         _riwayatProgress.clear();
         _riwayatProgress.addAll(response);
-        print(riwayatProgress.length);
       } on PostgrestException catch (e) {
         _riwayatProgress.clear();
         _riwayatProgress.addAll([

@@ -31,4 +31,28 @@ class LoadDataUser with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  final Map<String, dynamic> _statusChangePhoto = {};
+  Map<String, dynamic> get statusChangePhoto => _statusChangePhoto;
+
+  Future<void> changePhoto(String photo) async {
+    if (_userId != null) {
+      try {
+        var result = await supabase
+            .from('Users')
+            .update({'photo_profile': photo}).eq('id', _userId!);
+        if (result == null) {
+          _statusChangePhoto.clear();
+          _statusChangePhoto.addAll({'status': 200});
+        }
+      } on PostgrestException catch (e) {
+        _statusChangePhoto.clear();
+        _statusChangePhoto.addAll({'status': int.parse(e.code!)});
+      } catch (e) {
+        _statusChangePhoto.clear();
+        _statusChangePhoto.addAll({'status': 404});
+      }
+      notifyListeners();
+    }
+  }
 }

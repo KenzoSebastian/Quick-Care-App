@@ -115,6 +115,8 @@ flutter:
     - assets\profiles\pp8.png
     - assets\profiles\pp9.png
     - assets\profiles\pp10.png
+    - assets\profiles\pp11.png
+    - assets\profiles\pp12.png
     - assets\profiles\wave.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
