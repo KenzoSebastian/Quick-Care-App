@@ -28,15 +28,6 @@ class _HistoryPageState extends State<HistoryPage> {
       appBar: AppBar(
         backgroundColor: Colors.orange,
         title: const Text('History Page'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () async {
-              await Provider.of<RiwayatProvider>(context, listen: false)
-                  .setRiwayat(375);
-            },
-          ),
-        ],
       ),
       body: LiquidPullToRefresh(
         showChildOpacityTransition: false,

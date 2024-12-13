@@ -15,6 +15,7 @@ import './providers/login_provider.dart';
 import './providers/register_provider.dart';
 import './pages/login_page.dart';
 import './pages/intro_page.dart';
+import 'providers/inbox_provider.dart';
 import 'providers/riwayat_provider.dart';
 
 void main() async {
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: DokterProvider()),
         ChangeNotifierProvider.value(value: WeatherProvider()),
         ChangeNotifierProvider.value(value: RiwayatProvider()),
+        ChangeNotifierProvider.value(value: InboxProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

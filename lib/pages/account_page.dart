@@ -6,13 +6,14 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:quickcare_app/pages/edit_profile_page.dart';
+import 'package:quickcare_app/pages/inbox_page.dart';
 import 'package:quickcare_app/providers/riwayat_provider.dart';
 import 'package:quickcare_app/utils/load_all_data.dart';
 import 'package:quickcare_app/widgets/button.dart';
 import 'package:quickcare_app/widgets/overlay_message.dart';
-
 import '../providers/dashboard_provider.dart';
 import '../widgets/about_dialog.dart';
+import 'login_page.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -205,20 +206,14 @@ class _AccountPageState extends State<AccountPage> {
                     data: 'Inbox',
                     color: Colors.black,
                     width: screenSize.width,
-                    onTap: () {},
-                    trailing: const Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Colors.black,
-                    )),
-                _listTileProfile(
-                    icon: const Icon(
-                      Icons.settings,
-                      color: Colors.black,
-                    ),
-                    data: 'Pengaturan',
-                    color: Colors.black,
-                    width: screenSize.width,
-                    onTap: () {},
+                    onTap: () {
+                      PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const InboxPage(),
+                        withNavBar: false,
+                        pageTransitionAnimation: PageTransitionAnimation.fade,
+                      );
+                    },
                     trailing: const Icon(
                       Icons.keyboard_arrow_right,
                       color: Colors.black,
@@ -244,7 +239,14 @@ class _AccountPageState extends State<AccountPage> {
                     data: 'Keluar',
                     color: Colors.red,
                     width: screenSize.width,
-                    onTap: () {},
+                    onTap: () {
+                      PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: const LoginPage(),
+                        withNavBar: false,
+                        pageTransitionAnimation: PageTransitionAnimation.fade,
+                      );
+                    },
                     trailing: const Icon(
                       Icons.keyboard_arrow_right,
                       color: Colors.red,
@@ -402,7 +404,8 @@ class _AccountPageState extends State<AccountPage> {
       leading: icon,
       title: Text(
         data,
-        style: GoogleFonts.poppins(fontSize: width * .04, color: color, fontWeight: FontWeight.bold),
+        style: GoogleFonts.poppins(
+            fontSize: width * .04, color: color, fontWeight: FontWeight.bold),
       ),
       trailing: trailing,
     );

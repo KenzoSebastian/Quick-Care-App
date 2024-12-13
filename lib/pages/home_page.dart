@@ -6,6 +6,7 @@ import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:quickcare_app/pages/coming_soon_page.dart';
 import 'package:quickcare_app/pages/detail_dokter_page.dart';
 import 'package:quickcare_app/providers/dashboard_provider.dart';
 import 'package:quickcare_app/providers/dokter_provider.dart';
@@ -18,6 +19,7 @@ import '../providers/riwayat_provider.dart';
 import '../utils/load_all_data.dart';
 import '../widgets/card_riwayat.dart';
 import '../widgets/drawer.dart';
+import 'inbox_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -69,7 +71,14 @@ class _HomePageState extends State<HomePage> {
               title: "Chat dengan dokter",
               width: width,
               height: height,
-              onTap: () {}),
+              onTap: () {
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: const ComingSoonPage(),
+                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                  withNavBar: false,
+                );
+              }),
         ),
         AnimatedScaleCustom(
           duration: 300,
@@ -79,7 +88,14 @@ class _HomePageState extends State<HomePage> {
               title: "Toko Obat",
               width: width,
               height: height,
-              onTap: () {}),
+              onTap: () {
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: const ComingSoonPage(),
+                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                  withNavBar: false,
+                );
+              }),
         ),
         AnimatedScaleCustom(
           duration: 300,
@@ -89,7 +105,14 @@ class _HomePageState extends State<HomePage> {
               title: "HomeLab & Vaksinasi",
               width: width,
               height: height,
-              onTap: () {}),
+              onTap: () {
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: const ComingSoonPage(),
+                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                  withNavBar: false,
+                );
+              }),
         ),
         AnimatedScaleCustom(
           duration: 300,
@@ -99,7 +122,14 @@ class _HomePageState extends State<HomePage> {
               title: "THT",
               width: width,
               height: height,
-              onTap: () {}),
+              onTap: () {
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: const ComingSoonPage(),
+                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                  withNavBar: false,
+                );
+              }),
         ),
         AnimatedScaleCustom(
           duration: 300,
@@ -109,7 +139,14 @@ class _HomePageState extends State<HomePage> {
               title: "Kesehatan Mental",
               width: width,
               height: height,
-              onTap: () {}),
+              onTap: () {
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: const ComingSoonPage(),
+                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                  withNavBar: false,
+                );
+              }),
         ),
         AnimatedScaleCustom(
           duration: 300,
@@ -119,7 +156,14 @@ class _HomePageState extends State<HomePage> {
               title: "HaloSkin",
               width: width,
               height: height,
-              onTap: () {}),
+              onTap: () {
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: const ComingSoonPage(),
+                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                  withNavBar: false,
+                );
+              }),
         ),
         AnimatedScaleCustom(
           duration: 300,
@@ -129,7 +173,14 @@ class _HomePageState extends State<HomePage> {
               title: "Kesehatan Seksual",
               width: width,
               height: height,
-              onTap: () {}),
+              onTap: () {
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: const ComingSoonPage(),
+                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                  withNavBar: false,
+                );
+              }),
         ),
         AnimatedScaleCustom(
           duration: 300,
@@ -139,7 +190,14 @@ class _HomePageState extends State<HomePage> {
               title: "Kesehatan Mata",
               width: width,
               height: height,
-              onTap: () {}),
+              onTap: () {
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: const ComingSoonPage(),
+                  pageTransitionAnimation: PageTransitionAnimation.fade,
+                  withNavBar: false,
+                );
+              }),
         ),
       ];
 
@@ -212,8 +270,15 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {},
+            icon: const Icon(Icons.message),
+            onPressed: () {
+              PersistentNavBarNavigator.pushNewScreen(
+                context,
+                screen: const InboxPage(),
+                withNavBar: false,
+                pageTransitionAnimation: PageTransitionAnimation.fade,
+              );
+            },
           )
         ],
       ),
@@ -251,11 +316,14 @@ class _HomePageState extends State<HomePage> {
                           child: Consumer<LoadDataUser>(
                               builder: (context, provider, child) {
                             var data = provider.data;
-                            return Text(
-                              "${data['nama'] ?? 'Unknown'}",
-                              style: GoogleFonts.poppins(
-                                  fontSize: screenSize.width * .06,
-                                  fontWeight: FontWeight.bold),
+                            return SizedBox(
+                              width: screenSize.width * .6,
+                              child: Text(
+                                "${data['nama'] ?? ''}",
+                                style: GoogleFonts.poppins(
+                                    fontSize: screenSize.width * .06,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             );
                           }),
                         ),

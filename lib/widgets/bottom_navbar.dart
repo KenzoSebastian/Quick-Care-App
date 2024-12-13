@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:quickcare_app/pages/detail_dokter_page.dart';
 import 'package:quickcare_app/pages/edit_profile_page.dart';
+import 'package:quickcare_app/pages/inbox_page.dart';
 import 'package:quickcare_app/pages/order_dokter_page.dart';
 import 'package:quickcare_app/pages/succes_page.dart';
 import 'package:quickcare_app/providers/tab_bar_provider.dart';
 import 'package:quickcare_app/utils/load_all_data.dart';
 import '../pages/account_page.dart';
+import '../pages/coming_soon_page.dart';
 import '../pages/edit_order_page.dart';
 import '../pages/history_page.dart';
 import '../pages/home_page.dart';
 import 'package:provider/provider.dart';
+import '../pages/login_page.dart';
 import '../pages/search_page.dart';
 
 class BottomNavbar extends StatefulWidget {
@@ -76,6 +79,9 @@ class _BottomNavbarState extends State<BottomNavbar> {
         SuccesPage.routeName: (_) => const SuccesPage(),
         EditOrder.routeName: (_) => const EditOrder(),
         EditProfile.routeName: (_) => const EditProfile(),
+        InboxPage.routeName: (_) => const InboxPage(),
+        ComingSoonPage.routeName: (_) => const ComingSoonPage(),
+        LoginPage.routeName: (_) => const LoginPage(),
       });
 
   NavBarAnimationSettings _AnimationSetting() => const NavBarAnimationSettings(

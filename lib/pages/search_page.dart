@@ -31,14 +31,6 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         backgroundColor: Colors.green,
         title: const AnimatedFade(delay: 50, child: Text('search page')),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              Provider.of<DokterProvider>(context, listen: false).setDokter();
-            },
-          )
-        ],
       ),
       body: LiquidPullToRefresh(
         showChildOpacityTransition: false,

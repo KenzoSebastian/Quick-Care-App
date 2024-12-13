@@ -43,8 +43,8 @@ class Location {
       double longitude = position.longitude;
       return await wf.currentWeatherByLocation(latitude, longitude);
     } catch (e) {
-      return await wf.currentWeatherByLocation(51.507351, -0.127758);
-      // return null;
+      // return await wf.currentWeatherByLocation(51.507351, -0.127758);
+      return null;
     }
   }
 }

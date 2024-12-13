@@ -5,7 +5,7 @@ import '../utils/validate.dart';
 
 class LoadDataUser with ChangeNotifier {
   final supabase = Supabase.instance.client;
-  int? _userId = 37;
+  int? _userId;
   int? get userId => _userId;
 
   void setUserId(int id) {

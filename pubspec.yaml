@@ -95,6 +95,7 @@ flutter:
     - assets\images\splashBackground.png
     - assets\images\dokter.png
     - assets\images\edit.png
+    - assets\images\coming.png
     - assets\banners\banner1.png
     - assets\banners\banner2.png
     - assets\banners\banner3.png

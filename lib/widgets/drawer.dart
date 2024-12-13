@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:quickcare_app/providers/tab_bar_provider.dart';
 import 'package:quickcare_app/widgets/about_dialog.dart';
+import '../pages/login_page.dart';
 import '../providers/dashboard_provider.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -45,13 +47,13 @@ class MyDrawer extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(data['nama'] ?? 'erorr',
+                                Text(data['nama'] ?? '',
                                     style: GoogleFonts.lato(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                     )),
-                                Text(data['email'] ?? 'erorr',
+                                Text(data['email'] ?? '',
                                     style: GoogleFonts.lato(
                                       fontSize: 16.0,
                                       color: Colors.white,
@@ -69,15 +71,18 @@ class MyDrawer extends StatelessWidget {
               children: <Widget>[
                 ListTile(
                   leading: const Icon(Icons.home),
-                  title: const Text('Home'),
+                  title: const Text('Beranda'),
                   onTap: () {
                     Navigator.pop(context);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.calendar_today),
-                  title: const Text('Book Appointment'),
-                  onTap: () {},
+                  title: const Text('Booking Dokter'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    tabBarProvider.setTabIndex(1);
+                  },
                 ),
                 ListTile(
                   leading: const Icon(Icons.info),
@@ -89,9 +94,16 @@ class MyDrawer extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.exit_to_app),
+                  leading: const Icon(Icons.logout),
                   title: const Text('Logout'),
-                  onTap: () {},
+                  onTap: () {
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: const LoginPage(),
+                      withNavBar: false,
+                      pageTransitionAnimation: PageTransitionAnimation.fade,
+                    );
+                  },
                 ),
               ],
             ),
